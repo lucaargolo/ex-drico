@@ -1,0 +1,8 @@
+{
+  "meshes": [
+    {
+      "id": "exdrico:wool_mesh",
+      "texture": "minecraft:white_wool"
+    }
+  ]
+}

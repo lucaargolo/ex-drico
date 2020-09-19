@@ -20,6 +20,8 @@ repositories {
         name = "BuildCraft"
         url = "https://mod-buildcraft.com/maven"
     }
+
+    maven { url "http://server.bbkr.space:8081/artifactory/libs-release" }
     mavenLocal()
 }
 
@@ -39,6 +41,9 @@ dependencies {
     
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
     modImplementation "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+
+
+    modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
 }
 
 processResources {
