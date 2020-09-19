@@ -1,5 +1,6 @@
 package io.github.cafeteriaguild.exdrico
 
+import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
 import net.fabricmc.api.ModInitializer
 
 class ExDrico: ModInitializer {
@@ -9,7 +10,7 @@ class ExDrico: ModInitializer {
     }
 
     override fun onInitialize() {
-        TODO("Not yet implemented")
+        BlockCompendium.initBlocks()
     }
 
 }

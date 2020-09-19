@@ -16,13 +16,13 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "io.github.cafeteriaguild.exdrico.client.ExdricoClientKt"
+        "value": "io.github.cafeteriaguild.exdrico.client.ExDricoClient"
       }
     ],
     "main": [
       {
         "adapter": "kotlin",
-        "value": "io.github.cafeteriaguild.exdrico.Exdrico"
+        "value": "io.github.cafeteriaguild.exdrico.ExDrico"
       }
     ]
   },
