@@ -14,10 +14,16 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "io.github.cafeteriaguild.exdrico.client.ExdricoClient"
+      {
+        "adapter": "kotlin",
+        "value": "io.github.cafeteriaguild.exdrico.client.ExdricoClientKt"
+      }
     ],
     "main": [
-      "io.github.cafeteriaguild.exdrico.Exdrico"
+      {
+        "adapter": "kotlin",
+        "value": "io.github.cafeteriaguild.exdrico.Exdrico"
+      }
     ]
   },
   "mixins": [
