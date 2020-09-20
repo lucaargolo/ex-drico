@@ -4,7 +4,8 @@
   "package": "io.github.cafeteriaguild.exdrico.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AccessorLootContextTypes"
+    "AccessorLootContextTypes",
+    "PlayerManagerMixin"
   ],
   "client": [
   ],

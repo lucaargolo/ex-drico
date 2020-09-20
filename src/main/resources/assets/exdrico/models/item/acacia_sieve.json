@@ -1,0 +1,7 @@
+{
+  "parent": "exdrico:block/sieve",
+  "textures": {
+    "texture": "block/acacia_planks",
+    "particle": "block/acacia_planks"
+  }
+}

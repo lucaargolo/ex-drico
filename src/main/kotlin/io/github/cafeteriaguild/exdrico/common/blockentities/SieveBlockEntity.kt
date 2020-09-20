@@ -1,6 +1,7 @@
 package io.github.cafeteriaguild.exdrico.common.blockentities
 
 import io.github.cafeteriaguild.exdrico.common.blocks.SieveBlock
+import io.github.cafeteriaguild.exdrico.common.meshes.MeshType
 import io.github.cafeteriaguild.exdrico.mixin.AccessorLootContextTypes
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
 import io.github.cafeteriaguild.exdrico.utils.SyncedBlockEntity
@@ -13,6 +14,9 @@ import net.minecraft.util.registry.Registry
 
 class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity(block) {
 
+    var meshType: MeshType? = null
+    var block: Block? = null
+
     var progress = 0
 
     fun getLoot(world: ServerWorld, block: Block): List<ItemStack> {
@@ -23,7 +27,7 @@ class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity(block) {
     }
 
     companion object {
-        val SIEVE_LOOT_CONTEXT = LootContextType.Builder().build()
+        val SIEVE_LOOT_CONTEXT: LootContextType = LootContextType.Builder().build()
         init {
             AccessorLootContextTypes.getMap()[ModIdentifier("sieve")] = SIEVE_LOOT_CONTEXT
         }

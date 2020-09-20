@@ -1,8 +1,20 @@
 {
   "meshes": [
     {
-      "id": "exdrico:wool_mesh",
-      "texture": "minecraft:white_wool"
+      "id": "exdrico:string_mesh",
+      "texture": "minecraft:block/white_wool"
+    },
+    {
+      "id": "exdrico:flint_mesh",
+      "texture": "minecraft:block/stone"
+    },
+    {
+      "id": "exdrico:iron_mesh",
+      "texture": "minecraft:block/hopper_inside"
+    },
+    {
+      "id": "exdrico:diamond_mesh",
+      "texture": "minecraft:block/diamond_block"
     }
   ]
 }

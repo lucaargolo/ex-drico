@@ -41,8 +41,6 @@ dependencies {
     
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
     modImplementation "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
-
-
     modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
 }
 

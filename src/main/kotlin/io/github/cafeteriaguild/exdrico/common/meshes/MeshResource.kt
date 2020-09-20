@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
 class MeshResource : SimpleSynchronousResourceReloadListener {
+
     override fun apply(manager: ResourceManager?) {
         val jankson = Jankson.builder().build()
         val meshes = manager?.findResources("meshes") { r -> r.endsWith(".json") || r.endsWith(".json5") }
@@ -21,8 +22,8 @@ class MeshResource : SimpleSynchronousResourceReloadListener {
             arr.forEach {
                 it as JsonObject
                 val id = (it["id"] as JsonPrimitive).asString()
-                val textureId = (it["texture"] as JsonPrimitive).asString()
-                val meshType = MeshType(Identifier(textureId))
+                val texture = (it["texture"] as JsonPrimitive).asString()
+                val meshType = MeshType(Identifier(texture))
                 MeshType.TYPES[Identifier(id)] = meshType
             }
         }
