@@ -1,7 +1,7 @@
 package io.github.cafeteriaguild.exdrico
 
 import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
-import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium.ACACIA_SIEVE
+import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium.OAK_SIEVE
 import io.github.cafeteriaguild.exdrico.common.items.ItemCompendium
 import io.github.cafeteriaguild.exdrico.common.items.ItemCompendium.MESH
 import io.github.cafeteriaguild.exdrico.common.meshes.MeshResource
@@ -16,11 +16,11 @@ import net.minecraft.resource.ResourceType
 
 class ExDrico: ModInitializer {
 
+
     companion object {
         const val MOD_ID = "exdrico"
-        val CREATIVE_TAB: ItemGroup = FabricItemGroupBuilder.create(ModIdentifier("creative_tab")).icon{
-            ItemStack(ACACIA_SIEVE)
-        }.appendItems{ stacks ->
+        var CREATIVE_TAB: ItemGroup = FabricItemGroupBuilder.create(ModIdentifier("creative_tab")).icon { ItemStack(OAK_SIEVE) }.appendItems{ stacks ->
+            stacks.addAll(BlockCompendium.blocksStack)
             MeshType.TYPES.forEach {
                 val stack = ItemStack(MESH)
                 stack.orCreateTag.putString("mesh", it.key.toString())

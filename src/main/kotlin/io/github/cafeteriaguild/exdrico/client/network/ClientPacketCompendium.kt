@@ -15,7 +15,7 @@ object ClientPacketCompendium {
         ClientSidePacketRegistry.INSTANCE.register(SYNC_MESH_DATA_S2C) { packetContext: PacketContext, attachedData: PacketByteBuf ->
             val qnt = attachedData.readInt()
             packetContext.taskQueue.execute {
-                (0..qnt).forEach {
+                repeat(qnt) {
                     val id = attachedData.readIdentifier()
                     val meshType = MeshType.readFromBuf(attachedData)
                     MeshType.TYPES[id] = meshType

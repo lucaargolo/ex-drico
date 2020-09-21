@@ -23,6 +23,6 @@ open class SyncedBlockEntity(private val block: Block): BlockEntity(BlockCompend
 
     override fun fromClientTag(tag: CompoundTag?) = fromTag(block.defaultState, tag)
 
-    override fun toClientTag(tag: CompoundTag?) = toTag(tag)
+    override fun toClientTag(tag: CompoundTag?): CompoundTag = toTag(tag)
 
 }

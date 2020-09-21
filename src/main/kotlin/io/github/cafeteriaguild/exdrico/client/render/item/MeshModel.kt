@@ -53,6 +53,7 @@ class MeshModel: UnbakedModel, BakedModel, FabricBakedModel {
 
     override fun emitBlockQuads(p0: BlockRenderView?, p1: BlockState?, p2: BlockPos?, p3: Supplier<Random>?, p4: RenderContext?) { }
 
+    @Suppress("DEPRECATION")
     override fun emitItemQuads(stack: ItemStack, randSupplier: Supplier<Random>, context: RenderContext) {
 
         val modelIdentifier = ModelIdentifier(ModIdentifier("sieve_mesh"), "inventory")
