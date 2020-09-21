@@ -15,8 +15,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.resource.ResourceType
 
 class ExDrico: ModInitializer {
-
-
+    
     companion object {
         const val MOD_ID = "exdrico"
         var CREATIVE_TAB: ItemGroup = FabricItemGroupBuilder.create(ModIdentifier("creative_tab")).icon { ItemStack(OAK_SIEVE) }.appendItems{ stacks ->

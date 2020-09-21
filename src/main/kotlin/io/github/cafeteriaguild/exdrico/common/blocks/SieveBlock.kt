@@ -22,20 +22,6 @@ import net.minecraft.world.World
 
 class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(settings) {
 
-    companion object {
-        val sieveMap = linkedMapOf<Block, SieveBlock>()
-
-        val sprites: Collection<SpriteIdentifier>
-            get() {
-                val spriteList = mutableListOf<SpriteIdentifier>()
-                sieveMap.forEach { (baseBlock, _) ->
-                    val blockIdentifier = Registry.BLOCK.getId(baseBlock)
-                    spriteList.add(SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Identifier("minecraft:block/${blockIdentifier.path}")))
-                }
-                return spriteList
-            }
-    }
-
     val spriteId = sieveMap.size
 
     init {
@@ -78,5 +64,19 @@ class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(s
                 )
             )
         )
+    }
+
+    companion object {
+        val sieveMap = linkedMapOf<Block, SieveBlock>()
+
+        val sprites: Collection<SpriteIdentifier>
+            get() {
+                val spriteList = mutableListOf<SpriteIdentifier>()
+                sieveMap.forEach { (baseBlock, _) ->
+                    val blockIdentifier = Registry.BLOCK.getId(baseBlock)
+                    spriteList.add(SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Identifier("${blockIdentifier.namespace}:block/${blockIdentifier.path}")))
+                }
+                return spriteList
+            }
     }
 }

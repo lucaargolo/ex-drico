@@ -41,6 +41,17 @@ object BlockCompendium {
     val DARK_OAK_SIEVE = register(ModIdentifier("dark_oak_sieve"), SieveBlock(Blocks.DARK_OAK_PLANKS, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
     val ACACIA_SIEVE = register(ModIdentifier("acacia_sieve"), SieveBlock(Blocks.ACACIA_PLANKS, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
 
+    val OAK_VAT = register(ModIdentifier("oak_vat"), VatBlock(Blocks.OAK_PLANKS, true, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
+    val SPRUCE_VAT = register(ModIdentifier("spruce_vat"), VatBlock(Blocks.SPRUCE_PLANKS, true,FabricBlockSettings.of(Material.WOOD).nonOpaque()))
+    val BIRCH_VAT = register(ModIdentifier("birch_vat"), VatBlock(Blocks.BIRCH_PLANKS, true, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
+    val JUNGLE_VAT = register(ModIdentifier("jungle_vat"), VatBlock(Blocks.JUNGLE_PLANKS, true, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
+    val DARK_OAK_VAT = register(ModIdentifier("dark_oak_vat"), VatBlock(Blocks.DARK_OAK_PLANKS, true, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
+    val ACACIA_VAT = register(ModIdentifier("acacia_vat"), VatBlock(Blocks.ACACIA_PLANKS, true, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
+    val STONE_VAT = register(ModIdentifier("stone_vat"), VatBlock(Blocks.STONE, false, FabricBlockSettings.of(Material.STONE).nonOpaque()))
+    val ANDESITE_VAT = register(ModIdentifier("andesite_vat"), VatBlock(Blocks.ANDESITE, false, FabricBlockSettings.of(Material.STONE).nonOpaque()))
+    val DIORITE_VAT = register(ModIdentifier("diorite_vat"), VatBlock(Blocks.DIORITE, false, FabricBlockSettings.of(Material.STONE).nonOpaque()))
+    val GRANITE_VAT = register(ModIdentifier("granite_vat"), VatBlock(Blocks.GRANITE, false, FabricBlockSettings.of(Material.STONE).nonOpaque()))
+
     @Suppress("UNCHECKED_CAST")
     fun getEntityType(block: Block): BlockEntityType<*>? = blockEntityMap[block]
 
