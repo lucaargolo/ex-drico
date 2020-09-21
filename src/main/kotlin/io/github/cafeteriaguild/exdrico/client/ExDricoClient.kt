@@ -30,7 +30,6 @@ import java.util.function.Consumer
 @Suppress("UNCHECKED_CAST")
 class ExDricoClient: ClientModInitializer {
 
-    private val colorModel = ColorModel()
     private val sieveModel = SieveModel()
     private val vatModel = VatModel()
     private val customModelMap = linkedMapOf<ModelIdentifier, UnbakedModel>(
@@ -69,15 +68,15 @@ class ExDricoClient: ClientModInitializer {
                     if(modelIdentifier.namespace == identifier.namespace && modelIdentifier.path == identifier.path)
                         return@ModelVariantProvider vatModel
                 }
-                ColorBlock.blockMap.forEach { (block, _) ->
+                ColorBlock.blockMap.keys.forEach { block ->
                     val identifier = Registry.BLOCK.getId(block)
                     if(modelIdentifier.namespace == identifier.namespace && modelIdentifier.path == identifier.path)
-                        return@ModelVariantProvider colorModel
+                        return@ModelVariantProvider ColorModel(true, ColoredBlock.values().toList().indexOf(block.colorModel))
                 }
-                ColorItem.itemMap.forEach { (item, _) ->
+                ColorItem.itemMap.keys.forEach { item ->
                     val identifier = Registry.ITEM.getId(item)
                     if(modelIdentifier.namespace == identifier.namespace && modelIdentifier.path == identifier.path)
-                        return@ModelVariantProvider colorModel
+                        return@ModelVariantProvider ColorModel(false, ColoredBlock.values().size+(ColoredItem.values().toList().indexOf(item.colorModel)*2))
                 }
                 return@ModelVariantProvider null
             }
