@@ -12,9 +12,8 @@ import net.minecraft.item.Item
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
-import java.awt.Color
 
-class ResourceHelper(val prefix: Identifier, val color: Color) {
+class ResourceHelper(val prefix: Identifier, val color: Int) {
     fun withItems(provider: (String) -> ColorItem, vararg suffixes: String): ResourceHelper {
         suffixes.forEach { suffix ->
             Registry.register(Registry.ITEM, Identifier(prefix.namespace, "${prefix.path}_$suffix"), provider(suffix))

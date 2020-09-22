@@ -21,7 +21,6 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.BlockRenderView
-import java.awt.Color
 import java.util.*
 import java.util.function.Function
 import java.util.function.Supplier
@@ -95,7 +94,7 @@ class ColorModel(private val isBlock: Boolean, private val id: Int): UnbakedMode
         updateModelArray() // I hate minecraft
 
         val block = state.block as? ColorBlock ?: return
-        val color = block.color.rgb
+        val color = 255 shl 24 or block.color
 
         modelArray[id]?.let { blockModel ->
             context.pushTransform { quad ->
@@ -119,7 +118,7 @@ class ColorModel(private val isBlock: Boolean, private val id: Int): UnbakedMode
             emitBlockQuads(null, block.defaultState, null, randSupplier, context)
         }
         (stack.item as? ColorItem)?.let { item ->
-            val color = item.color.rgb
+            val color = 255 shl 24 or item.color
 
             context.fallbackConsumer().accept(modelArray[id])
 

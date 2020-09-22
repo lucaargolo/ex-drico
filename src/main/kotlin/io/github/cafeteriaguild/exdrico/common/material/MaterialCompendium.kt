@@ -1,31 +1,21 @@
 package io.github.cafeteriaguild.exdrico.common.material
 
-import io.github.cafeteriaguild.exdrico.client.render.color.ColoredBlock
-import io.github.cafeteriaguild.exdrico.client.render.color.ColoredItem
-import io.github.cafeteriaguild.exdrico.common.blocks.ColorBlock
-import io.github.cafeteriaguild.exdrico.common.items.ColorItem
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
 import io.github.cafeteriaguild.exdrico.utils.ResourceHelper
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Material
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
-import java.awt.Color
 
 object MaterialCompendium {
 
-    private val materialMap: LinkedHashMap<Identifier, Color> = linkedMapOf()
+    private val materialMap: LinkedHashMap<Identifier, Int> = linkedMapOf()
 
-    private fun <T: Color> register(identifier: Identifier, color: T): T {
+    private fun register(identifier: Identifier, color: Int): Int {
         materialMap[identifier] = color
         return color
     }
 
-    val COPPER = register(ModIdentifier("copper"), Color.ORANGE)
-    val LEAD = register(ModIdentifier("lead"), Color(120, 0, 255))
-    val GOLD = register(ModIdentifier("gold"), Color.YELLOW)
+    val COPPER = register(ModIdentifier("copper"), 0xfa8d20)
+    val LEAD = register(ModIdentifier("lead"), 0x592099)
+    val GOLD = register(ModIdentifier("gold"), 0xffdd00)
 
     fun initMaterials() {
         materialMap.forEach { (identifier, color) ->
