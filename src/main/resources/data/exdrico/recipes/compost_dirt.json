@@ -1,0 +1,133 @@
+{
+  "type": "exdrico:vat",
+  "ingredients": [
+    {
+      "tag": "minecraft:saplings",
+      "add": 125
+    },
+    {
+      "tag": "minecraft:leaves",
+      "add": 125
+    },
+    {
+      "tag": "minecraft:flowers",
+      "add": 100
+    },
+    {
+      "tag": "minecraft:fishes",
+      "add": 150
+    },
+    {
+      "tag": "exdrico:meat",
+      "add": 200
+    },
+    {
+      "tag": "exdrico:seeds",
+      "add": 80
+    },
+    {
+      "item": "minecraft:wheat",
+      "add": 80
+    },
+    {
+      "item": "minecraft:carrot",
+      "add": 100
+    },
+    {
+      "item": "minecraft:beetroot",
+      "add": 100
+    },
+    {
+      "item": "minecraft:potato",
+      "add": 100
+    },
+    {
+      "item": "minecraft:nether_wart",
+      "add": 100
+    },
+    {
+      "item": "minecraft:egg",
+      "add": 80
+    },
+    {
+      "item": "minecraft:string",
+      "add": 40
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "add": 100
+    },
+    {
+      "item": "minecraft:spider_eye",
+      "add": 80
+    },
+    {
+      "item": "minecraft:bread",
+      "add": 160
+    },
+    {
+      "item": "minecraft:red_mushroom",
+      "add": 100
+    },
+    {
+      "item": "minecraft:brown_mushroom",
+      "add": 100
+    },
+    {
+      "item": "minecraft:pumpkin_pie",
+      "add": 160
+    },
+    {
+      "item": "minecraft:apple",
+      "add": 100
+    },
+    {
+      "item": "minecraft:melon_slice",
+      "add": 40
+    },
+    {
+      "item": "minecraft:melon",
+      "add": 160
+    },
+    {
+      "item": "minecraft:pumpkin",
+      "add": 160
+    },
+    {
+      "item": "minecraft:carved_pumpkin",
+      "add": 160
+    },
+    {
+      "item": "minecraft:jack_o_lantern",
+      "add": 160
+    },
+    {
+      "item": "minecraft:cactus",
+      "add": 100
+    },
+    {
+      "item": "minecraft:baked_potato",
+      "add": 150
+    },
+    {
+      "item": "minecraft:poisonous_potato",
+      "add": 200
+    },
+    {
+      "item": "minecraft:lily_pad",
+      "add": 100
+    },
+    {
+      "item": "minecraft:vine",
+      "add": 100
+    },
+    {
+      "item": "minecraft:sugar_cane",
+      "add": 80
+    }
+  ],
+  "output": {
+    "item": "minecraft:dirt"
+  },
+  "cost": 1000
+}
