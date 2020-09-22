@@ -3,6 +3,7 @@ package io.github.cafeteriaguild.exdrico.common.blocks
 import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
 import io.github.cafeteriaguild.exdrico.common.items.ItemCompendium
 import io.github.cafeteriaguild.exdrico.common.items.MeshItem
+import io.github.cafeteriaguild.exdrico.common.meshes.MeshType
 import io.github.cafeteriaguild.exdrico.utils.VisibleBlockWithEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -58,7 +59,7 @@ class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(s
         (holdingItem as? BlockItem)?.let {
             val block = it.block
             if (blockEntity.block == null && blockEntity.meshType != null) {
-                if(world is ServerWorld && SieveBlockEntity.getLoot(world, block).isNotEmpty()) {
+                if(world is ServerWorld && SieveBlockEntity.getLoot(world, block, blockEntity.meshType ?: MeshType.EMPTY).isNotEmpty()) {
                     blockEntity.block = block
                     holdingStack.decrement(1)
                     blockEntity.markDirtyAndSync()
@@ -84,7 +85,7 @@ class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(s
                 blockEntity.progress = 0
                 blockEntity.block = null
                 if(world is ServerWorld) {
-                    val loot = SieveBlockEntity.getLoot(world, block)
+                    val loot = SieveBlockEntity.getLoot(world, block, blockEntity.meshType ?: MeshType.EMPTY)
                     ItemScatterer.spawn(world, pos, loot)
                 }
             }
