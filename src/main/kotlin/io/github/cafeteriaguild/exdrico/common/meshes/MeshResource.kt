@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger
 class MeshResource : SimpleSynchronousResourceReloadListener {
 
     override fun apply(manager: ResourceManager?) {
+        MeshType.TYPES.clear()
         val jankson = Jankson.builder().build()
         val meshes = manager?.findResources("meshes") { r -> r.endsWith(".json") || r.endsWith(".json5") }
         meshes?.forEach { mesh ->

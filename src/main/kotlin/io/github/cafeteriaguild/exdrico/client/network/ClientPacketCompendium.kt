@@ -13,6 +13,7 @@ object ClientPacketCompendium {
     fun initPackets() {
 
         ClientSidePacketRegistry.INSTANCE.register(SYNC_MESH_DATA_S2C) { packetContext: PacketContext, attachedData: PacketByteBuf ->
+            MeshType.TYPES.clear()
             val qnt = attachedData.readInt()
             packetContext.taskQueue.execute {
                 repeat(qnt) {

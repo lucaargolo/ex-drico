@@ -45,9 +45,9 @@ class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity(block) {
             AccessorLootContextTypes.getMap()[ModIdentifier("sieve")] = SIEVE_LOOT_CONTEXT
         }
 
-        fun getLoot(world: ServerWorld, block: Block): DefaultedList<ItemStack> {
-            val identifier = Registry.BLOCK.getId(block).path
-            val table = world.server.lootManager.getTable(ModIdentifier("sieve/$identifier"))
+        fun getLoot(world: ServerWorld, block: Block, meshType: MeshType): DefaultedList<ItemStack> {
+            val blockIdentifier = Registry.BLOCK.getId(block).path
+            val table = world.server.lootManager.getTable(Identifier(meshType.identifier.namespace, "sieve/${meshType.identifier.path}/$blockIdentifier"))
             val ctx = LootContext.Builder(world).random(world.random).build(SIEVE_LOOT_CONTEXT)
             val stackList = table.generateLoot(ctx)
             val finalList = DefaultedList.ofSize(stackList.size, ItemStack.EMPTY)
