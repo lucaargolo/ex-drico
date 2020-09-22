@@ -5,6 +5,7 @@ import io.github.cafeteriaguild.exdrico.client.render.color.ColoredItem
 import io.github.cafeteriaguild.exdrico.common.blocks.ColorBlock
 import io.github.cafeteriaguild.exdrico.common.items.ColorItem
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
+import io.github.cafeteriaguild.exdrico.utils.ResourceHelper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Material
 import net.minecraft.item.BlockItem
@@ -24,21 +25,11 @@ object MaterialCompendium {
 
     val COPPER = register(ModIdentifier("copper"), Color.ORANGE)
     val LEAD = register(ModIdentifier("lead"), Color(120, 0, 255))
+    val GOLD = register(ModIdentifier("gold"), Color.YELLOW)
 
     fun initMaterials() {
         materialMap.forEach { (identifier, color) ->
-            Registry.register(Registry.ITEM, Identifier(identifier.namespace, identifier.path+"_dust"), ColorItem(ColoredItem.ORE_DUST, color, Item.Settings()))
-            Registry.register(Registry.ITEM, Identifier(identifier.namespace, identifier.path+"_pieces"), ColorItem(ColoredItem.ORE_PIECES, color, Item.Settings()))
-            Registry.register(Registry.ITEM, Identifier(identifier.namespace, identifier.path+"_chunk"), ColorItem(ColoredItem.ORE_CHUNK, color, Item.Settings()))
-            val dustBlock = ColorBlock(ColoredBlock.ORE_DUST, color, FabricBlockSettings.of(Material.SOIL))
-            Registry.register(Registry.BLOCK, Identifier(identifier.namespace, identifier.path+"_dust_block"), dustBlock)
-            Registry.register(Registry.ITEM, Identifier(identifier.namespace, identifier.path+"_dust_block"), BlockItem(dustBlock, Item.Settings()))
-            val sandBlock = ColorBlock(ColoredBlock.ORE_SAND, color, FabricBlockSettings.of(Material.SOIL))
-            Registry.register(Registry.BLOCK, Identifier(identifier.namespace, identifier.path+"_sand_block"), sandBlock)
-            Registry.register(Registry.ITEM, Identifier(identifier.namespace, identifier.path+"_sand_block"), BlockItem(sandBlock, Item.Settings()))
-            val gravelBlock = ColorBlock(ColoredBlock.ORE_GRAVEL, color, FabricBlockSettings.of(Material.SOIL))
-            Registry.register(Registry.BLOCK, Identifier(identifier.namespace, identifier.path+"_gravel_block"), gravelBlock)
-            Registry.register(Registry.ITEM, Identifier(identifier.namespace, identifier.path+"_gravel_block"), BlockItem(gravelBlock, Item.Settings()))
+            ResourceHelper(identifier, color).withItems("chunk", "pieces", "dust").withBlocks()
         }
     }
 
