@@ -6,10 +6,15 @@ import io.github.cafeteriaguild.exdrico.mixin.AccessorLootContextTypes
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
 import io.github.cafeteriaguild.exdrico.utils.SyncedBlockEntity
 import net.minecraft.block.Block
+import net.minecraft.block.BlockState
+import net.minecraft.block.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextType
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.registry.Registry
 
 class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity(block) {
@@ -19,17 +24,37 @@ class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity(block) {
 
     var progress = 0
 
-    fun getLoot(world: ServerWorld, block: Block): List<ItemStack> {
-        val identifier = Registry.BLOCK.getId(block).path
-        val table = world.server.lootManager.getTable(ModIdentifier("sieve/$identifier"))
-        val ctx = LootContext.Builder(world).random(world.random).build(SIEVE_LOOT_CONTEXT)
-        return table.generateLoot(ctx)
+    override fun fromTag(state: BlockState, tag: CompoundTag) {
+        super.fromTag(state, tag)
+        val blockId = Identifier(tag.getString("block"))
+        block = if(Registry.BLOCK.get(blockId) == Blocks.AIR) block else Registry.BLOCK.get(blockId)
+        meshType = MeshType.TYPES[Identifier(tag.getString("mesh"))] ?: meshType
+        progress = tag.getInt("progress")
+    }
+
+    override fun toTag(tag: CompoundTag): CompoundTag {
+        tag.putString("block", block?.let {Registry.BLOCK.getId(it).toString()} ?: "")
+        tag.putString("mesh", meshType?.identifier?.toString() ?: "")
+        tag.putInt("progress", progress)
+        return super.toTag(tag)
     }
 
     companion object {
-        val SIEVE_LOOT_CONTEXT: LootContextType = LootContextType.Builder().build()
+        private val SIEVE_LOOT_CONTEXT: LootContextType = LootContextType.Builder().build()
         init {
             AccessorLootContextTypes.getMap()[ModIdentifier("sieve")] = SIEVE_LOOT_CONTEXT
+        }
+
+        fun getLoot(world: ServerWorld, block: Block): DefaultedList<ItemStack> {
+            val identifier = Registry.BLOCK.getId(block).path
+            val table = world.server.lootManager.getTable(ModIdentifier("sieve/$identifier"))
+            val ctx = LootContext.Builder(world).random(world.random).build(SIEVE_LOOT_CONTEXT)
+            val stackList = table.generateLoot(ctx)
+            val finalList = DefaultedList.ofSize(stackList.size, ItemStack.EMPTY)
+            stackList.forEachIndexed { idx, stack ->
+                finalList[idx] = stack
+            }
+            return finalList
         }
     }
 }
