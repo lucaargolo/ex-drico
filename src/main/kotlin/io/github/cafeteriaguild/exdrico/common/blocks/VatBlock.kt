@@ -47,20 +47,28 @@ class VatBlock(baseBlock: Block, val isBurnable: Boolean, settings: Settings): V
 
     @Suppress("DEPRECATION")
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos?, player: PlayerEntity, hand: Hand, hit: BlockHitResult?): ActionResult {
-        if (world?.isClient == true) return ActionResult.FAIL
         val blockEntity = world?.getBlockEntity(pos) as? VatBlockEntity ?: return ActionResult.PASS
+
         val result = FluidInvUtil.interactHandWithTank(blockEntity.fluidInv as FixedFluidInv, player, hand)
-        if (result.asActionResult().isAccepted) return result.asActionResult()
+        if (result.asActionResult().isAccepted) {
+            blockEntity.markDirtyAndSync()
+            return result.asActionResult()
+        }
+
         val stackInHand = player.getStackInHand(hand)
         if (stackInHand.isEmpty) return ActionResult.PASS
-        val rem = blockEntity.inv.insert(stackInHand)
-        val recipe = blockEntity.getRecipe(world as ServerWorld)
-        if (recipe != null && recipe.matches(blockEntity.inv, blockEntity.fluidInv)) {
-            val stack = blockEntity.inv.extract(1)
-            player.setStackInHand(hand, rem)
-            blockEntity.progress -= recipe.input.entries.first { (ing, _) -> ing.test(stack) }.value
-        } else blockEntity.inv.extract(1)
-        return if (stackInHand == rem) ActionResult.FAIL else ActionResult.SUCCESS
+
+        (world as? ServerWorld)?.let { serverWorld ->
+            val insertion = blockEntity.inv.insert(stackInHand)
+            val recipe = blockEntity.getRecipe(serverWorld)
+            if (recipe != null && recipe.matches(blockEntity.inv, blockEntity.fluidInv)) {
+                val stack = blockEntity.inv.extract(1)
+                player.setStackInHand(hand, insertion)
+                blockEntity.progress -= recipe.input.entries.first { (ing, _) -> ing.test(stack) }.value
+            } else blockEntity.inv.extract(1)
+            blockEntity.markDirtyAndSync()
+        }
+        return ActionResult.SUCCESS
     }
 
     override fun getOutlineShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {

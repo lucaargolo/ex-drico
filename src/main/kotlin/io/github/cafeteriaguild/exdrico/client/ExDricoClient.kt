@@ -4,11 +4,13 @@ import io.github.cafeteriaguild.exdrico.client.network.ClientPacketCompendium
 import io.github.cafeteriaguild.exdrico.client.render.block.SieveModel
 import io.github.cafeteriaguild.exdrico.client.render.block.VatModel
 import io.github.cafeteriaguild.exdrico.client.render.blockentities.SieveBlockEntityRenderer
+import io.github.cafeteriaguild.exdrico.client.render.blockentities.VatBlockEntityRenderer
 import io.github.cafeteriaguild.exdrico.client.render.color.ColorModel
 import io.github.cafeteriaguild.exdrico.client.render.color.ColoredBlock
 import io.github.cafeteriaguild.exdrico.client.render.color.ColoredItem
 import io.github.cafeteriaguild.exdrico.client.render.item.MeshModel
 import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
+import io.github.cafeteriaguild.exdrico.common.blockentities.VatBlockEntity
 import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
 import io.github.cafeteriaguild.exdrico.common.blocks.ColorBlock
 import io.github.cafeteriaguild.exdrico.common.blocks.SieveBlock
@@ -85,6 +87,9 @@ class ExDricoClient: ClientModInitializer {
         //Register custom block entity renderers
         SieveBlock.sieveMap.forEach { (_, sieve) ->
             BlockEntityRendererRegistry.INSTANCE.register(BlockCompendium.getEntityType(sieve) as BlockEntityType<SieveBlockEntity>) { SieveBlockEntityRenderer(it) }
+        }
+        VatBlock.vatMap.forEach { (_, vat) ->
+            BlockEntityRendererRegistry.INSTANCE.register(BlockCompendium.getEntityType(vat) as BlockEntityType<VatBlockEntity>) { VatBlockEntityRenderer(it) }
         }
     }
 

@@ -17,13 +17,13 @@ object ItemCompendium {
     }
 
     val MESH = register(ModIdentifier("mesh"), MeshItem(Item.Settings()))
+    val STONE_HAMMER = register(ModIdentifier("stone_hammer"), HammerItem(ToolMaterials.STONE, Item.Settings().maxDamage(128)))
+    val WOODEN_CROOK = register(ModIdentifier("wooden_crook"), HammerItem(ToolMaterials.WOOD, Item.Settings().maxDamage(32)))
 
     fun initItems() {
         itemMap.forEach { (identifier, item) ->
             Registry.register(Registry.ITEM, identifier, item)
         }
-        Registry.register(Registry.ITEM, ModIdentifier("stone_hammer"), HammerItem(ToolMaterials.STONE, Item.Settings().maxDamage(128)))
-        Registry.register(Registry.ITEM, ModIdentifier("wooden_crook"), HammerItem(ToolMaterials.WOOD, Item.Settings().maxDamage(32)))
     }
 
 }

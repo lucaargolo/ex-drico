@@ -71,7 +71,7 @@ class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(s
         if(holdingStack.isEmpty && player.isSneaking && blockEntity.block == null && blockEntity.meshType != null) {
             val meshType = blockEntity.meshType
             blockEntity.meshType = null
-            blockEntity.markDirtyAndSync()
+            blockEntity.markDirtyAndSyncRender()
             val stack = ItemStack(ItemCompendium.MESH)
             stack.orCreateTag.putString("mesh", meshType!!.identifier.toString())
             player.setStackInHand(hand, stack)
