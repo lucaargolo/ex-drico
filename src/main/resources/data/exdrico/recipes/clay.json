@@ -2,7 +2,7 @@
   "type": "exdrico:vat",
   "ingredients": [
     {
-      "item": "minecraft:sand",
+      "item": "exdrico:clay",
       "add": 1
     }
   ],
@@ -12,7 +12,7 @@
     "denominator": 1
   },
   "output": {
-    "item": "minecraft:dirt"
+    "item": "minecraft:clay"
   },
   "cost": 1
 }

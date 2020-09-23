@@ -34,6 +34,8 @@ object BlockCompendium {
         return block
     }
 
+    val DUST = register(ModIdentifier("dust"), Block(FabricBlockSettings.copyOf(Blocks.SAND)))
+
     val OAK_SIEVE = register(ModIdentifier("oak_sieve"), SieveBlock(Blocks.OAK_PLANKS, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
     val SPRUCE_SIEVE = register(ModIdentifier("spruce_sieve"), SieveBlock(Blocks.SPRUCE_PLANKS, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
     val BIRCH_SIEVE = register(ModIdentifier("birch_sieve"), SieveBlock(Blocks.BIRCH_PLANKS, FabricBlockSettings.of(Material.WOOD).nonOpaque()))
