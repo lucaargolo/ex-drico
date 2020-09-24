@@ -24,6 +24,7 @@ class VatRecipe(
     val input: Map<Ingredient, Int>,
     val fluidInput: FluidVolume?,
     val out: ItemStack,
+    val cost: Int,
     val ticks: Int
 ) : Recipe<Inventory> {
     override fun getId(): Identifier = identifier
@@ -59,16 +60,18 @@ class VatRecipe(
         open class VatRecipeSerializer : RecipeSerializer<VatRecipe> {
             override fun read(id: Identifier, json: JsonObject): VatRecipe {
                 val ingredients = json["ingredients"].asJsonArray.associate { ingredientFromJson(it.asJsonObject) }
-                val ticks = json.get("cost").asInt
+                val cost = json.get("cost").asInt
+                val ticks = JsonHelper.getInt(json, "ticks", 0)
                 val output = itemStackFromJson(json["output"].asJsonObject)
                 val fluidInputJson = json.getAsJsonObject("fluidInput")
                 val fluidInput = if (fluidInputJson == null) null else getFluidFromJson(fluidInputJson)
-                return VatRecipe(id, ingredients, fluidInput, output, ticks)
+                return VatRecipe(id, ingredients, fluidInput, output, cost, ticks)
             }
 
             override fun read(id: Identifier, buf: PacketByteBuf): VatRecipe  {
                 val size = buf.readInt()
                 val pair = (0 until size).associate { Pair(Ingredient.fromPacket(buf), buf.readInt()) }
+                val cost = buf.readInt()
                 val ticks = buf.readInt()
                 val output = buf.readItemStack()
                 val hasInputFluid = buf.readBoolean()
@@ -78,7 +81,7 @@ class VatRecipe(
                     val fluidKey = FluidKeys.get(Registry.FLUID.get(fluidId))
                     fluidKey.withAmount(fluidAmount)
                 } else null
-                return VatRecipe(id, pair, fluidInput, output, ticks)
+                return VatRecipe(id, pair, fluidInput, output, cost, ticks)
             }
 
             override fun write(buf: PacketByteBuf, recipe: VatRecipe) {
@@ -87,6 +90,7 @@ class VatRecipe(
                     ing.write(buf)
                     buf.writeInt(int)
                 }
+                buf.writeInt(recipe.cost)
                 buf.writeInt(recipe.ticks)
                 buf.writeItemStack(recipe.output)
                 buf.writeBoolean(recipe.fluidInput != null)

@@ -22,6 +22,7 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
     val fluidInv = SimpleFixedFluidInv(1, FluidAmount.BUCKET)
     private var currentRecipe: VatRecipe? = null
     var progress = 0
+    var ticksRemaining = 0
 
     override fun toTag(tag: CompoundTag): CompoundTag {
         val invTag = inv.toTag()
@@ -43,19 +44,20 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
 
     override fun tick() {
         if (world?.isClient == true) return
-        if (currentRecipe != null && progress <= 0) {
+        if (currentRecipe != null && progress <= 0 && ticksRemaining <= 0) {
             if (currentRecipe!!.fluidInput != null)
                 fluidInv.extract(currentRecipe!!.fluidInput!!.amount())
             inv.setInvStack(0, currentRecipe!!.output.copy(), Simulation.ACTION)
             currentRecipe = null
             sync()
-        }
+        } else if (progress <= 0 && ticksRemaining > 0) ticksRemaining--
     }
 
     fun getRecipe(world: ServerWorld): VatRecipe? {
         if (currentRecipe == null || !currentRecipe!!.matches(inv, fluidInv)) {
             currentRecipe = world.recipeManager.listAllOfType(VatRecipe.TYPE).firstOrNull { it.matches(inv, fluidInv) }
-            progress = currentRecipe?.ticks ?: 0
+            progress = currentRecipe?.cost ?: 0
+            ticksRemaining = currentRecipe?.ticks ?: 0
         }
         return currentRecipe
     }
