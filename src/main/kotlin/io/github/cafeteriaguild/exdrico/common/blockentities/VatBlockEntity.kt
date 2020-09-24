@@ -1,5 +1,6 @@
 package io.github.cafeteriaguild.exdrico.common.blockentities
 
+import alexiil.mc.lib.attributes.Simulation
 import alexiil.mc.lib.attributes.fluid.amount.FluidAmount
 import alexiil.mc.lib.attributes.fluid.impl.SimpleFixedFluidInv
 import alexiil.mc.lib.attributes.item.impl.FullFixedItemInv
@@ -10,9 +11,7 @@ import net.minecraft.block.BlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.ItemScatterer
 import net.minecraft.util.Tickable
-import net.minecraft.util.collection.DefaultedList
 
 class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
 
@@ -47,9 +46,9 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
         if (currentRecipe != null && progress <= 0) {
             if (currentRecipe!!.fluidInput != null)
                 fluidInv.extract(currentRecipe!!.fluidInput!!.amount())
-            inv.extract(1)
-            ItemScatterer.spawn(world, pos.up(), DefaultedList.ofSize(1, currentRecipe!!.out.copy()))
+            inv.setInvStack(0, currentRecipe!!.output.copy(), Simulation.ACTION)
             currentRecipe = null
+            sync()
         }
     }
 

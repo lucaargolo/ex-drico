@@ -2,7 +2,7 @@
   "type": "exdrico:vat",
   "ingredients": [
     {
-      "item": "exdrico:clay",
+      "item": "exdrico:dust",
       "add": 1
     }
   ],

@@ -14,6 +14,8 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
+import net.minecraft.util.ItemScatterer
+import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
@@ -48,6 +50,12 @@ class VatBlock(baseBlock: Block, val isBurnable: Boolean, settings: Settings): V
     @Suppress("DEPRECATION")
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos?, player: PlayerEntity, hand: Hand, hit: BlockHitResult?): ActionResult {
         val blockEntity = world?.getBlockEntity(pos) as? VatBlockEntity ?: return ActionResult.PASS
+
+        val vatStack = blockEntity.inv.extract(1)
+        if (!vatStack.isEmpty) {
+            ItemScatterer.spawn(world, pos?.up(), DefaultedList.ofSize(1, vatStack))
+            return ActionResult.SUCCESS
+        }
 
         val result = FluidInvUtil.interactHandWithTank(blockEntity.fluidInv as FixedFluidInv, player, hand)
         if (result.asActionResult().isAccepted) {
