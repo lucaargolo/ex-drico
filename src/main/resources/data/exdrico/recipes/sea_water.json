@@ -1,0 +1,19 @@
+{
+  "type": "exdrico:vat",
+  "ingredients": [],
+  "fluidInput": {
+    "fluid": "minecraft:water",
+    "numerator": 1,
+    "denominator": 1
+  },
+  "blockBelow": "minecraft:sand",
+  "fluidOutput": {
+    "fluid": "exdrico:sea_water_still",
+    "numerator": 1,
+    "denominator": 1
+  },
+  "output": {
+    "item": "minecraft:air"
+  },
+  "ticks": 200
+}

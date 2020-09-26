@@ -15,6 +15,8 @@ import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
 import io.github.cafeteriaguild.exdrico.common.blocks.ColorBlock
 import io.github.cafeteriaguild.exdrico.common.blocks.SieveBlock
 import io.github.cafeteriaguild.exdrico.common.blocks.VatBlock
+import io.github.cafeteriaguild.exdrico.common.fluids.FluidCompendium
+import io.github.cafeteriaguild.exdrico.common.fluids.FluidType
 import io.github.cafeteriaguild.exdrico.common.items.ColorItem
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
 import net.fabricmc.api.ClientModInitializer
@@ -40,6 +42,11 @@ class ExDricoClient: ClientModInitializer {
 
     override fun onInitializeClient() {
         ClientPacketCompendium.initPackets()
+        FluidType.WATER.registerReloadListener()
+        FluidType.LAVA.registerReloadListener()
+
+        FluidCompendium.WITCH_WATER_STILL.registerRender(FluidType.WATER)
+        FluidCompendium.SEA_WATER_STILL.registerRender(FluidType.WATER)
 
         //Register some models required by baked models
         ModelLoadingRegistry.INSTANCE.registerAppender { _: ResourceManager?, out: Consumer<ModelIdentifier?> ->

@@ -1,0 +1,18 @@
+{
+  "type": "exdrico:vat",
+  "ingredients": [
+    {
+      "item": "exdrico:protecting_doll",
+      "add": 1
+    }
+  ],
+  "fluidInput": {
+    "fluid": "minecraft:water",
+    "numerator": 1,
+    "denominator": 1
+  },
+  "output": {
+    "item": "minecraft:guardian_spawn_egg"
+  },
+  "cost": 1
+}

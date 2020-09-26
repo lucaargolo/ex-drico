@@ -2,6 +2,7 @@ package io.github.cafeteriaguild.exdrico
 
 import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
 import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium.OAK_SIEVE
+import io.github.cafeteriaguild.exdrico.common.fluids.FluidCompendium
 import io.github.cafeteriaguild.exdrico.common.items.ItemCompendium
 import io.github.cafeteriaguild.exdrico.common.items.ItemCompendium.MESH
 import io.github.cafeteriaguild.exdrico.common.material.MaterialCompendium
@@ -35,6 +36,7 @@ class ExDrico: ModInitializer {
         MaterialCompendium.initMaterials()
         BlockCompendium.initBlocks()
         ItemCompendium.initItems()
+        FluidCompendium.initFluids()
 
         Registry.register(Registry.RECIPE_TYPE, VatRecipe.ID, VatRecipe.TYPE)
         Registry.register(Registry.RECIPE_SERIALIZER, VatRecipe.ID, VatRecipe.SERIALIZER)

@@ -1,0 +1,18 @@
+{
+  "type": "exdrico:vat",
+  "ingredients": [
+    {
+      "item": "exdrico:buzzing_doll",
+      "add": 1
+    }
+  ],
+  "fluidInput": {
+    "fluid": "exdrico:witch_water_still",
+    "numerator": 1,
+    "denominator": 1
+  },
+  "output": {
+    "item": "minecraft:bee_spawn_egg"
+  },
+  "cost": 1
+}

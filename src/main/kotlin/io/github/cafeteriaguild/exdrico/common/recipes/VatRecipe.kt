@@ -7,6 +7,7 @@ import alexiil.mc.lib.attributes.fluid.volume.FluidVolume
 import alexiil.mc.lib.attributes.item.FixedItemInv
 import com.google.gson.JsonObject
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
+import net.minecraft.block.Block
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
@@ -23,7 +24,9 @@ class VatRecipe(
     val identifier: Identifier,
     val input: Map<Ingredient, Int>,
     val fluidInput: FluidVolume?,
+    val blockBelow: Block?,
     val out: ItemStack,
+    val fluidOut: FluidVolume?,
     val cost: Int,
     val ticks: Int
 ) : Recipe<Inventory> {
@@ -34,13 +37,14 @@ class VatRecipe(
 
     override fun craft(inv: Inventory?): ItemStack = out.copy()
 
-    fun matches(inv: FixedItemInv, fluidInv: FixedFluidInv?): Boolean {
+    fun matches(inv: FixedItemInv, fluidInv: FixedFluidInv?, blockBelow: Block?): Boolean {
         val fluidVolume = fluidInv?.getInvFluid(0)
-        if (fluidInput != null && fluidVolume != null && (fluidVolume.fluidKey != fluidInput!!.fluidKey || fluidVolume.amount() < fluidInput.amount())) {
+        if (fluidVolume != null && !fluidVolume.isEmpty && (fluidVolume.fluidKey != fluidInput?.fluidKey || fluidVolume.amount() < fluidInput?.amount())) {
              return false
         }
+        if (this.blockBelow != null && blockBelow != this.blockBelow) return false
         val stack = inv.getInvStack(0)
-        return input.any { (first, _) -> first.test(stack) }
+        return input.isEmpty() || input.any { (first, _) -> first.test(stack) }
     }
 
     override fun fits(width: Int, height: Int): Boolean = true
@@ -60,12 +64,16 @@ class VatRecipe(
         open class VatRecipeSerializer : RecipeSerializer<VatRecipe> {
             override fun read(id: Identifier, json: JsonObject): VatRecipe {
                 val ingredients = json["ingredients"].asJsonArray.associate { ingredientFromJson(it.asJsonObject) }
-                val cost = json.get("cost").asInt
+                val cost = JsonHelper.getInt(json, "cost", 0)
                 val ticks = JsonHelper.getInt(json, "ticks", 0)
                 val output = itemStackFromJson(json["output"].asJsonObject)
                 val fluidInputJson = json.getAsJsonObject("fluidInput")
                 val fluidInput = if (fluidInputJson == null) null else getFluidFromJson(fluidInputJson)
-                return VatRecipe(id, ingredients, fluidInput, output, cost, ticks)
+                val blockId = JsonHelper.getString(json, "blockBelow", "nothing:nothing")
+                val block = Registry.BLOCK.getOrEmpty(Identifier(blockId)).orElse(null)
+                val fluidOutJson = json.getAsJsonObject("fluidOutput")
+                val fluidOutput = if (fluidOutJson == null) null else getFluidFromJson(fluidOutJson)
+                return VatRecipe(id, ingredients, fluidInput, block, output, fluidOutput, cost, ticks)
             }
 
             override fun read(id: Identifier, buf: PacketByteBuf): VatRecipe  {
@@ -81,7 +89,16 @@ class VatRecipe(
                     val fluidKey = FluidKeys.get(Registry.FLUID.get(fluidId))
                     fluidKey.withAmount(fluidAmount)
                 } else null
-                return VatRecipe(id, pair, fluidInput, output, cost, ticks)
+                val hasOutputFluid = buf.readBoolean()
+                val fluidOutput = if (hasOutputFluid) {
+                    val fluidId = buf.readIdentifier()
+                    val fluidAmount = FluidAmount.fromMcBuffer(buf)
+                    val fluidKey = FluidKeys.get(Registry.FLUID.get(fluidId))
+                    fluidKey.withAmount(fluidAmount)
+                } else null
+                val blockId = buf.readInt()
+                val block = Registry.BLOCK.get(blockId)
+                return VatRecipe(id, pair, fluidInput, block, output, fluidOutput, cost, ticks)
             }
 
             override fun write(buf: PacketByteBuf, recipe: VatRecipe) {
@@ -98,6 +115,12 @@ class VatRecipe(
                     buf.writeIdentifier(recipe.fluidInput.fluidKey.entry.id)
                     recipe.fluidInput.amount().toMcBuffer(buf)
                 }
+                buf.writeBoolean(recipe.fluidOut != null)
+                if (recipe.fluidOut != null) {
+                    buf.writeIdentifier(recipe.fluidOut.fluidKey.entry.id)
+                    recipe.fluidOut.amount().toMcBuffer(buf)
+                }
+                buf.writeInt(Registry.BLOCK.getRawId(recipe.blockBelow))
             }
         }
 

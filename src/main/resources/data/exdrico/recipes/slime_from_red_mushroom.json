@@ -1,0 +1,18 @@
+{
+  "type": "exdrico:vat",
+  "ingredients": [
+    {
+      "item": "minecraft:red_mushroom",
+      "add": 1
+    }
+  ],
+  "fluidInput": {
+    "fluid": "exdrico:witch_water_still",
+    "numerator": 1,
+    "denominator": 1
+  },
+  "output": {
+    "item": "minecraft:slime_ball"
+  },
+  "cost": 1
+}

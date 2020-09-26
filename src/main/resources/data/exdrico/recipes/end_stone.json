@@ -1,0 +1,18 @@
+{
+  "type": "exdrico:vat",
+  "ingredients": [
+    {
+      "item": "minecraft:glowstone_dust",
+      "add": 1
+    }
+  ],
+  "fluidInput": {
+    "fluid": "minecraft:lava",
+    "numerator": 1,
+    "denominator": 1
+  },
+  "output": {
+    "item": "minecraft:end_stone"
+  },
+  "cost": 1
+}

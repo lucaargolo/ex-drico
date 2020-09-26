@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.client.util.SpriteIdentifier
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
 import net.minecraft.screen.PlayerScreenHandler
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
@@ -62,6 +63,8 @@ class VatBlock(baseBlock: Block, val isBurnable: Boolean, settings: Settings): V
 
         val result = FluidInvUtil.interactHandWithTank(blockEntity.fluidInv as FixedFluidInv, player, hand)
         if (result.asActionResult().isAccepted) {
+            if (world is ServerWorld)
+                blockEntity.getRecipe(world)
             blockEntity.markDirtyAndSync()
             return result.asActionResult()
         }
@@ -81,9 +84,13 @@ class VatBlock(baseBlock: Block, val isBurnable: Boolean, settings: Settings): V
         }
         (world as? ServerWorld)?.let { serverWorld ->
             val recipe = blockEntity.getRecipe(serverWorld)
-            if (recipe != null && recipe.matches(blockEntity.inv, blockEntity.fluidInv)) {
+            val blockBelow = world.getBlockState(pos!!.down()).block
+            if (recipe != null && recipe.matches(blockEntity.inv, blockEntity.fluidInv, blockBelow)) {
                 val stack = blockEntity.inv.extract(1)
-                player.setStackInHand(hand, insertion)
+                if (stackInHand.item.hasRecipeRemainder())
+                    player.setStackInHand(hand, ItemStack(stackInHand.item.recipeRemainder))
+                else
+                    player.setStackInHand(hand, insertion)
                 blockEntity.remainingProgress -= recipe.input.entries.first { (ing, _) -> ing.test(stack) }.value
             } else blockEntity.inv.extract(1)
             blockEntity.markDirtyAndSync()

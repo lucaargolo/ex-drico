@@ -11,7 +11,9 @@ import io.github.cafeteriaguild.exdrico.utils.SyncedBlockEntity
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.block.BlockState
+import net.minecraft.entity.SpawnReason
 import net.minecraft.item.ItemStack
+import net.minecraft.item.SpawnEggItem
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
@@ -25,7 +27,6 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
         override fun getMaxAmount(slot: Int, stack: ItemStack?): Int = 1
     }
     val fluidInv = SimpleFixedFluidInv(1, FluidAmount.BUCKET)
-
     private var currentRecipe: VatRecipe? = null
 
     var finalStack: ItemStack = ItemStack.EMPTY
@@ -65,7 +66,14 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
         if (currentRecipe != null && remainingProgress <= 0 && remainingTicks <= 0) {
             if (currentRecipe!!.fluidInput != null)
                 fluidInv.extract(currentRecipe!!.fluidInput!!.amount())
-            inv.setInvStack(0, currentRecipe!!.output.copy(), Simulation.ACTION)
+            if (currentRecipe!!.fluidOut != null)
+                fluidInv.insert(currentRecipe!!.fluidOut)
+            if (currentRecipe!!.output.item is SpawnEggItem) {
+                val entityType = (currentRecipe!!.output.item as SpawnEggItem).getEntityType(null)
+                val entity = entityType.create(world as ServerWorld, null, null, null, pos.up(), SpawnReason.MOB_SUMMONED, true, false)
+                world?.spawnEntity(entity)
+            } else
+                inv.setInvStack(0, currentRecipe!!.output.copy(), Simulation.ACTION)
             currentRecipe = null
             world?.players?.forEach {
                 (it as? ServerPlayerEntity)?.let { serverPlayerEntity ->
@@ -79,8 +87,9 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
     }
 
     fun getRecipe(world: ServerWorld): VatRecipe? {
-        if (currentRecipe == null || !currentRecipe!!.matches(inv, fluidInv)) {
-            currentRecipe = world.recipeManager.listAllOfType(VatRecipe.TYPE).firstOrNull { it.matches(inv, fluidInv) }
+        val blockBelow = world.getBlockState(pos.down()).block
+        if (currentRecipe == null || !currentRecipe!!.matches(inv, fluidInv, blockBelow)) {
+            currentRecipe = world.recipeManager.listAllOfType(VatRecipe.TYPE).firstOrNull { it.matches(inv, fluidInv, blockBelow) }
             finalStack = currentRecipe?.output ?: ItemStack.EMPTY
             finalProgress = currentRecipe?.cost?.toFloat() ?: 0f
             remainingProgress = currentRecipe?.cost?.toFloat() ?: 0f
