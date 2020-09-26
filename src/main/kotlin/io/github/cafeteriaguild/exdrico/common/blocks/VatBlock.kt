@@ -3,10 +3,13 @@ package io.github.cafeteriaguild.exdrico.common.blocks
 import alexiil.mc.lib.attributes.fluid.FixedFluidInv
 import alexiil.mc.lib.attributes.fluid.FluidInvUtil
 import io.github.cafeteriaguild.exdrico.common.blockentities.VatBlockEntity
+import io.github.cafeteriaguild.exdrico.utils.SpriteColorCache
 import io.github.cafeteriaguild.exdrico.utils.VisibleBlockWithEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.ShapeContext
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.client.util.SpriteIdentifier
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.screen.PlayerScreenHandler
@@ -66,13 +69,22 @@ class VatBlock(baseBlock: Block, val isBurnable: Boolean, settings: Settings): V
         val stackInHand = player.getStackInHand(hand)
         if (stackInHand.isEmpty) return ActionResult.PASS
 
+        val insertion = blockEntity.inv.insert(stackInHand)
+        if(world.isClient && insertion != stackInHand) {
+            blockEntity.sumQnt++
+            val itemId = Registry.ITEM.getId(stackInHand.item)
+            val model = MinecraftClient.getInstance().bakedModelManager.getModel(ModelIdentifier(itemId, "inventory"))
+            val color = SpriteColorCache.getColor(model.sprite.id)
+            blockEntity.sumr += (color shr 16 and 255)
+            blockEntity.sumg += (color shr 8 and 255)
+            blockEntity.sumb += (color and 255)
+        }
         (world as? ServerWorld)?.let { serverWorld ->
-            val insertion = blockEntity.inv.insert(stackInHand)
             val recipe = blockEntity.getRecipe(serverWorld)
             if (recipe != null && recipe.matches(blockEntity.inv, blockEntity.fluidInv)) {
                 val stack = blockEntity.inv.extract(1)
                 player.setStackInHand(hand, insertion)
-                blockEntity.progress -= recipe.input.entries.first { (ing, _) -> ing.test(stack) }.value
+                blockEntity.remainingProgress -= recipe.input.entries.first { (ing, _) -> ing.test(stack) }.value
             } else blockEntity.inv.extract(1)
             blockEntity.markDirtyAndSync()
         }

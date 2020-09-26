@@ -4,6 +4,7 @@ import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
 import io.github.cafeteriaguild.exdrico.common.items.ItemCompendium
 import io.github.cafeteriaguild.exdrico.common.items.MeshItem
 import io.github.cafeteriaguild.exdrico.common.meshes.MeshType
+import io.github.cafeteriaguild.exdrico.utils.SpriteColorCache
 import io.github.cafeteriaguild.exdrico.utils.VisibleBlockWithEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
