@@ -32,6 +32,7 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
     var finalStack: ItemStack = ItemStack.EMPTY
     var finalProgress = 0f
     var remainingProgress = 0f
+    var requiredTicks = 0f
     var remainingTicks = 0f
 
     var sumQnt = 0
@@ -46,6 +47,8 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
         tag.put("fluidInv", fluidInvTag)
         tag.putFloat("progress", remainingProgress)
         tag.putFloat("finalProgress", finalProgress)
+        tag.putFloat("remainingTicks", remainingTicks)
+        tag.putFloat("requiredTicks", requiredTicks)
         tag.putString("currentRecipe", currentRecipe?.id?.toString() ?: "")
         tag.put("finalStack", finalStack.toTag(CompoundTag()))
         return super.toTag(tag)
@@ -56,6 +59,8 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
         fluidInv.fromTag(tag.getCompound("fluidInv"))
         remainingProgress = tag.getFloat("progress")
         finalProgress = tag.getFloat("finalProgress")
+        remainingTicks = tag.getFloat("remainingTicks")
+        requiredTicks = tag.getFloat("requiredTicks")
         currentRecipe = (world as? ServerWorld)?.recipeManager?.listAllOfType(VatRecipe.TYPE)?.firstOrNull { it.id.toString() == tag.getString("currentRecipe")}
         finalStack = ItemStack.fromTag(tag.getCompound("finalStack"))
         super.fromTag(state, tag)
@@ -82,8 +87,8 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
                     ServerSidePacketRegistry.INSTANCE.sendToPlayer(serverPlayerEntity, ClientPacketCompendium.CLEAR_VAT_COLOR_S2C, attachedData)
                 }
             }
-            sync()
         } else if (remainingProgress <= 0 && remainingTicks > 0) remainingTicks--
+        markDirtyAndSync()
     }
 
     fun getRecipe(world: ServerWorld): VatRecipe? {
@@ -91,9 +96,10 @@ class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
         if (currentRecipe == null || !currentRecipe!!.matches(inv, fluidInv, blockBelow)) {
             currentRecipe = world.recipeManager.listAllOfType(VatRecipe.TYPE).firstOrNull { it.matches(inv, fluidInv, blockBelow) }
             finalStack = currentRecipe?.output ?: ItemStack.EMPTY
-            finalProgress = currentRecipe?.cost?.toFloat() ?: 0f
             remainingProgress = currentRecipe?.cost?.toFloat() ?: 0f
+            finalProgress = remainingProgress
             remainingTicks = currentRecipe?.ticks?.toFloat() ?: 0f
+            requiredTicks = remainingTicks
         }
         return currentRecipe
     }

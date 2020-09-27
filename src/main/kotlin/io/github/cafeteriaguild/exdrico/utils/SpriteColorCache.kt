@@ -11,6 +11,9 @@ object SpriteColorCache {
         colorMap[lastIdentifier] = color
     }
 
-    fun getColor(identifier: Identifier) = colorMap[identifier] ?: -1
+    fun getColor(spriteIdentifier: Identifier): Int {
+        val identifier = Identifier(spriteIdentifier.namespace, "textures/${spriteIdentifier.path}.png")
+        return colorMap[identifier] ?: -1
+    }
 
 }

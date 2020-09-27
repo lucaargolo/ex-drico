@@ -8,6 +8,7 @@
     "PlayerManagerMixin"
   ],
   "client": [
+    "SpriteAtlasTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

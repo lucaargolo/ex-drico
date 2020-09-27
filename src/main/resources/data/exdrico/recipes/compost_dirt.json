@@ -129,5 +129,6 @@
   "output": {
     "item": "minecraft:dirt"
   },
-  "cost": 1000
+  "cost": 1000,
+  "ticks": 200
 }

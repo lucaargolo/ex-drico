@@ -53,22 +53,20 @@ class VatBlockEntityRenderer(dispatcher: BlockEntityRenderDispatcher): BlockEnti
         val blockSpriteIdentifier = SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Identifier(blockIdentifier.namespace, "block/"+blockIdentifier.path))
         val blockSprite = blockSpriteIdentifier.sprite
 
-        val currentColor = if(entity.finalStack.item is BlockItem) try { Color(entity.sumr/entity.sumQnt, entity.sumg/entity.sumQnt, entity.sumb/entity.sumQnt) } catch(e: Exception) { null } ?: Color.WHITE else Color.WHITE
-        val finalColor = if(entity.finalStack.item is BlockItem) Color(SpriteColorCache.getColor(blockSprite.id)) else Color.WHITE
+        val currentColor = if(entity.finalStack.item is BlockItem && entity.sumQnt > 0) Color(entity.sumr/entity.sumQnt, entity.sumg/entity.sumQnt, entity.sumb/entity.sumQnt) else Color.WHITE
+        val finalColor = Color.WHITE
 
-        val ir = MathHelper.lerp(tickDelta, currentColor.red/255f, finalColor.red/255f)
-        val ig = MathHelper.lerp(tickDelta, currentColor.green/255f, finalColor.green/255f)
-        val ib = MathHelper.lerp(tickDelta, currentColor.blue/255f, finalColor.blue/255f)
+        val delta = (entity.requiredTicks-entity.remainingTicks)/entity.requiredTicks
+        val ir = MathHelper.lerp(delta, currentColor.red.toFloat(), finalColor.red.toFloat())/255f
+        val ig = MathHelper.lerp(delta, currentColor.green.toFloat(), finalColor.green.toFloat())/255f
+        val ib = MathHelper.lerp(delta, currentColor.blue.toFloat(), finalColor.blue.toFloat())/255f
 
         val blockColor = Color(ir, ig, ib)
 
-//        entity.sumr -= (255-blockColor.red)
-//        entity.sumg -= (255-blockColor.green)
-//        entity.sumb -= (255-blockColor.blue)
-//        entity.sumQnt++
-//        entity.sumr += blockColor.red
-//        entity.sumg += blockColor.green
-//        entity.sumb += blockColor.blue
+        entity.sumQnt = 1
+        entity.sumr = (ir*255).toInt()
+        entity.sumg = (ig*255).toInt()
+        entity.sumb = (ib*255).toInt()
 
         val bp = if(entity.finalStack.item is BlockItem) (entity.finalProgress-entity.remainingProgress)/entity.finalProgress else 1f
 
