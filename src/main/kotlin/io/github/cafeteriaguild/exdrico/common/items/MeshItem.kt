@@ -21,9 +21,5 @@ class MeshItem(settings: Settings) : Item(settings) {
             val id = Identifier.tryParse(type) ?: return MeshType.EMPTY
             return MeshType.TYPES[id] ?: MeshType.EMPTY
         }
-
     }
-
-
-
 }

@@ -24,6 +24,12 @@
         "adapter": "kotlin",
         "value": "io.github.cafeteriaguild.exdrico.ExDrico"
       }
+    ],
+    "rei_plugins_v0": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.cafeteriaguild.exdrico.common.rei.REIPlugin"
+      }
     ]
   },
   "mixins": [
