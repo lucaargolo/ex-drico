@@ -1,9 +1,6 @@
 package io.github.cafeteriaguild.exdrico.client.render.blockentities
 
-import alexiil.mc.lib.attributes.Simulation
-import alexiil.mc.lib.attributes.item.filter.ConstantItemFilter
 import io.github.cafeteriaguild.exdrico.common.blockentities.VatBlockEntity
-import io.github.cafeteriaguild.exdrico.utils.SpriteColorCache
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.RenderLayers
@@ -28,6 +25,8 @@ class VatBlockEntityRenderer(dispatcher: BlockEntityRenderDispatcher): BlockEnti
         val entry = matrices.peek()
         val normal = Direction.UP.unitVector
 
+        val delta = (entity.requiredTicks-entity.remainingTicks)/entity.requiredTicks
+
         val fluidInv = entity.fluidInv
         val fluid = fluidInv.getInvFluid(0).rawFluid ?: Fluids.EMPTY
 
@@ -46,36 +45,33 @@ class VatBlockEntityRenderer(dispatcher: BlockEntityRenderDispatcher): BlockEnti
         }
 
         val inv = entity.inv
-        val stack = inv.attemptExtraction(ConstantItemFilter.ANYTHING, 1, Simulation.SIMULATE)
+        val stack = inv.getInvStack(0)
 
-        val block = (entity.finalStack.item as? BlockItem)?.block ?: (stack.item as? BlockItem)?.block ?: return
+        val block = (entity.finalStack.item as? BlockItem)?.block ?: (stack.item as? BlockItem)?.block
+        if (block == null) {
+            entity.sumr = 0
+            entity.sumg = 0
+            entity.sumb = 0
+            entity.sumQnt = 0
+            return
+        }
         val blockIdentifier = Registry.BLOCK.getId(block)
         val blockSpriteIdentifier = SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Identifier(blockIdentifier.namespace, "block/"+blockIdentifier.path))
         val blockSprite = blockSpriteIdentifier.sprite
 
         val currentColor = if(entity.finalStack.item is BlockItem && entity.sumQnt > 0) Color(entity.sumr/entity.sumQnt, entity.sumg/entity.sumQnt, entity.sumb/entity.sumQnt) else Color.WHITE
-        val finalColor = Color.WHITE
 
-        val delta = (entity.requiredTicks-entity.remainingTicks)/entity.requiredTicks
-        val ir = MathHelper.lerp(delta, currentColor.red.toFloat(), finalColor.red.toFloat())/255f
-        val ig = MathHelper.lerp(delta, currentColor.green.toFloat(), finalColor.green.toFloat())/255f
-        val ib = MathHelper.lerp(delta, currentColor.blue.toFloat(), finalColor.blue.toFloat())/255f
-
-        val blockColor = Color(ir, ig, ib)
-
-        entity.sumQnt = 1
-        entity.sumr = (ir*255).toInt()
-        entity.sumg = (ig*255).toInt()
-        entity.sumb = (ib*255).toInt()
-
+        val ir = MathHelper.lerp(delta, currentColor.red.toFloat(), 255f)/255f
+        val ig = MathHelper.lerp(delta, currentColor.green.toFloat(), 255f)/255f
+        val ib = MathHelper.lerp(delta, currentColor.blue.toFloat(), 255f)/255f
         val bp = if(entity.finalStack.item is BlockItem) (entity.finalProgress-entity.remainingProgress)/entity.finalProgress else 1f
 
         val blockBuffer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE))
 
-        blockBuffer.vertex(entry.model, 0.126f, bp-0.0625f, 0.874f).color(blockColor.red/255f, blockColor.green/255f, blockColor.blue/255f, 1f).texture(blockSprite.maxU, blockSprite.minV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
-        blockBuffer.vertex(entry.model, 0.874f, bp-0.0625f, 0.874f).color(blockColor.red/255f, blockColor.green/255f, blockColor.blue/255f, 1f).texture(blockSprite.minU, blockSprite.minV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
-        blockBuffer.vertex(entry.model, 0.874f, bp-0.0625f, 0.126f).color(blockColor.red/255f, blockColor.green/255f, blockColor.blue/255f, 1f).texture(blockSprite.minU, blockSprite.maxV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
-        blockBuffer.vertex(entry.model, 0.126f, bp-0.0625f, 0.126f).color(blockColor.red/255f, blockColor.green/255f, blockColor.blue/255f, 1f).texture(blockSprite.maxU, blockSprite.maxV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
+        blockBuffer.vertex(entry.model, 0.126f, bp-0.0625f, 0.874f).color(ir, ig, ib, 1f).texture(blockSprite.maxU, blockSprite.minV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
+        blockBuffer.vertex(entry.model, 0.874f, bp-0.0625f, 0.874f).color(ir, ig, ib, 1f).texture(blockSprite.minU, blockSprite.minV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
+        blockBuffer.vertex(entry.model, 0.874f, bp-0.0625f, 0.126f).color(ir, ig, ib, 1f).texture(blockSprite.minU, blockSprite.maxV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
+        blockBuffer.vertex(entry.model, 0.126f, bp-0.0625f, 0.126f).color(ir, ig, ib, 1f).texture(blockSprite.maxU, blockSprite.maxV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
 
 
     }

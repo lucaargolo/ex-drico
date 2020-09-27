@@ -58,8 +58,11 @@ class VatBlock(baseBlock: Block, val isBurnable: Boolean, settings: Settings): V
         val vatStack = blockEntity.inv.extract(1)
         if (!vatStack.isEmpty) {
             ItemScatterer.spawn(world, pos?.up(), DefaultedList.ofSize(1, vatStack))
+            blockEntity.markDirtyAndSync()
             return ActionResult.SUCCESS
         }
+
+        if (blockEntity.requiredTicks > 0 && blockEntity.remainingProgress <= 0) return ActionResult.PASS
 
         val result = FluidInvUtil.interactHandWithTank(blockEntity.fluidInv as FixedFluidInv, player, hand)
         if (result.asActionResult().isAccepted) {
@@ -91,7 +94,7 @@ class VatBlock(baseBlock: Block, val isBurnable: Boolean, settings: Settings): V
                     player.setStackInHand(hand, ItemStack(stackInHand.item.recipeRemainder))
                 else
                     player.setStackInHand(hand, insertion)
-                blockEntity.remainingProgress -= recipe.input.entries.first { (ing, _) -> ing.test(stack) }.value
+                blockEntity.remainingProgress -= recipe.input.entries.firstOrNull { (ing, _) -> ing.test(stack) }?.value ?: 0
             } else blockEntity.inv.extract(1)
             blockEntity.markDirtyAndSync()
         }
