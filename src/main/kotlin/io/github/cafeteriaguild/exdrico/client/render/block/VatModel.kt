@@ -3,6 +3,7 @@ package io.github.cafeteriaguild.exdrico.client.render.block
 import com.mojang.datafixers.util.Pair
 import io.github.cafeteriaguild.exdrico.common.blocks.VatBlock
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
+import io.github.cafeteriaguild.exdrico.utils.emitFromVanilla
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext
@@ -86,11 +87,7 @@ class VatModel: UnbakedModel, BakedModel, FabricBakedModel {
             true
         }
 
-        val emitter = context.emitter
-        modelArray[0]?.getQuads(null, null, randSupplier.get())?.forEach(Consumer { q: BakedQuad ->
-            emitter.fromVanilla(q.vertexData, 0, false)
-            emitter.emit()
-        })
+        modelArray[0]?.emitFromVanilla(context, randSupplier) { true }
 
         context.popTransform()
     }

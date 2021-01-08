@@ -1,21 +1,15 @@
 package io.github.cafeteriaguild.exdrico.client.render.blockentities
 
 import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
-import net.minecraft.block.Blocks
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.render.RenderLayers
 import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
-import net.minecraft.client.render.model.json.ModelTransformation
 import net.minecraft.client.texture.Sprite
 import net.minecraft.client.util.SpriteIdentifier
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.client.util.math.Vector3f
-import net.minecraft.fluid.Fluids
-import net.minecraft.item.ItemStack
 import net.minecraft.screen.PlayerScreenHandler
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Direction
@@ -30,7 +24,7 @@ class SieveBlockEntityRenderer(dispatcher: BlockEntityRenderDispatcher): BlockEn
     }
 
     override fun render(entity: SieveBlockEntity, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
-        val block = entity.block ?: return
+        val block = entity.processingBlock ?: return
         val blockIdentifier = Registry.BLOCK.getId(block)
         val spriteIdentifier = SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Identifier(blockIdentifier.namespace, "block/"+blockIdentifier.path))
         val sprite = spriteIdentifier.sprite

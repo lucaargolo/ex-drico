@@ -1,29 +1,34 @@
 package io.github.cafeteriaguild.exdrico.client
 
 import io.github.cafeteriaguild.exdrico.client.network.ClientPacketCompendium
+import io.github.cafeteriaguild.exdrico.client.render.block.CrucibleModel
+import io.github.cafeteriaguild.exdrico.client.render.block.InfestedLeavesModel
 import io.github.cafeteriaguild.exdrico.client.render.block.SieveModel
 import io.github.cafeteriaguild.exdrico.client.render.block.VatModel
+import io.github.cafeteriaguild.exdrico.client.render.blockentities.CrucibleBlockEntityRenderer
+import io.github.cafeteriaguild.exdrico.client.render.blockentities.InfestedLeavesBlockEntityRenderer
 import io.github.cafeteriaguild.exdrico.client.render.blockentities.SieveBlockEntityRenderer
 import io.github.cafeteriaguild.exdrico.client.render.blockentities.VatBlockEntityRenderer
 import io.github.cafeteriaguild.exdrico.client.render.color.ColorModel
 import io.github.cafeteriaguild.exdrico.client.render.color.ColoredBlock
 import io.github.cafeteriaguild.exdrico.client.render.color.ColoredItem
 import io.github.cafeteriaguild.exdrico.client.render.item.MeshModel
+import io.github.cafeteriaguild.exdrico.common.blockentities.CrucibleBlockEntity
+import io.github.cafeteriaguild.exdrico.common.blockentities.InfestedLeavesBlockEntity
 import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
 import io.github.cafeteriaguild.exdrico.common.blockentities.VatBlockEntity
-import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
-import io.github.cafeteriaguild.exdrico.common.blocks.ColorBlock
-import io.github.cafeteriaguild.exdrico.common.blocks.SieveBlock
-import io.github.cafeteriaguild.exdrico.common.blocks.VatBlock
+import io.github.cafeteriaguild.exdrico.common.blocks.*
 import io.github.cafeteriaguild.exdrico.common.fluids.FluidCompendium
 import io.github.cafeteriaguild.exdrico.common.fluids.FluidType
 import io.github.cafeteriaguild.exdrico.common.items.ColorItem
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.model.UnbakedModel
 import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.resource.ResourceManager
@@ -36,6 +41,8 @@ class ExDricoClient: ClientModInitializer {
 
     private val sieveModel = SieveModel()
     private val vatModel = VatModel()
+    private val crucibleModel = CrucibleModel()
+    private val infestedLeavesModel = InfestedLeavesModel()
     private val customModelMap = linkedMapOf<ModelIdentifier, UnbakedModel>(
         Pair(ModelIdentifier(ModIdentifier("mesh"), "inventory"), MeshModel()),
     )
@@ -77,6 +84,16 @@ class ExDricoClient: ClientModInitializer {
                     if(modelIdentifier.namespace == identifier.namespace && modelIdentifier.path == identifier.path)
                         return@ModelVariantProvider vatModel
                 }
+                CrucibleBlock.crucibleMap.forEach { (_, crucible) ->
+                    val identifier = Registry.BLOCK.getId(crucible)
+                    if(modelIdentifier.namespace == identifier.namespace && modelIdentifier.path == identifier.path)
+                        return@ModelVariantProvider crucibleModel
+                }
+                InfestedLeavesBlock.infestedLeavesMap.forEach { (_, crucible) ->
+                    val identifier = Registry.BLOCK.getId(crucible)
+                    if(modelIdentifier.namespace == identifier.namespace && modelIdentifier.path == identifier.path)
+                        return@ModelVariantProvider infestedLeavesModel
+                }
                 ColorBlock.blockMap.keys.forEach { block ->
                     val identifier = Registry.BLOCK.getId(block)
                     if(modelIdentifier.namespace == identifier.namespace && modelIdentifier.path == identifier.path)
@@ -97,6 +114,17 @@ class ExDricoClient: ClientModInitializer {
         }
         VatBlock.vatMap.forEach { (_, vat) ->
             BlockEntityRendererRegistry.INSTANCE.register(BlockCompendium.getEntityType(vat) as BlockEntityType<VatBlockEntity>) { VatBlockEntityRenderer(it) }
+        }
+        CrucibleBlock.crucibleMap.forEach { (_, crucible) ->
+            BlockEntityRendererRegistry.INSTANCE.register(BlockCompendium.getEntityType(crucible) as BlockEntityType<CrucibleBlockEntity>) { CrucibleBlockEntityRenderer(it) }
+        }
+        InfestedLeavesBlock.infestedLeavesMap.forEach { (_, infestedLeaves) ->
+            BlockEntityRendererRegistry.INSTANCE.register(BlockCompendium.getEntityType(infestedLeaves) as BlockEntityType<InfestedLeavesBlockEntity>) { InfestedLeavesBlockEntityRenderer(it) }
+        }
+
+        //Register custom render layers
+        InfestedLeavesBlock.infestedLeavesMap.forEach { (_, infestedLeaves) ->
+            BlockRenderLayerMap.INSTANCE.putBlock(infestedLeaves, RenderLayer.getCutoutMipped())
         }
     }
 

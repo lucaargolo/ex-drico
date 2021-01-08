@@ -17,23 +17,23 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.registry.Registry
 
-class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity(block) {
+class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity<SieveBlock>(block) {
 
     var meshType: MeshType? = null
-    var block: Block? = null
+    var processingBlock: Block? = null
 
     var progress = 0
 
     override fun fromTag(state: BlockState, tag: CompoundTag) {
         super.fromTag(state, tag)
         val blockId = Identifier(tag.getString("block"))
-        block = if(Registry.BLOCK.get(blockId) == Blocks.AIR) block else Registry.BLOCK.get(blockId)
+        processingBlock = if(Registry.BLOCK.get(blockId) == Blocks.AIR) processingBlock else Registry.BLOCK.get(blockId)
         meshType = MeshType.TYPES[Identifier(tag.getString("mesh"))] ?: meshType
         progress = tag.getInt("progress")
     }
 
     override fun toTag(tag: CompoundTag): CompoundTag {
-        tag.putString("block", block?.let {Registry.BLOCK.getId(it).toString()} ?: "")
+        tag.putString("block", processingBlock?.let {Registry.BLOCK.getId(it).toString()} ?: "")
         tag.putString("mesh", meshType?.identifier?.toString() ?: "")
         tag.putInt("progress", progress)
         return super.toTag(tag)

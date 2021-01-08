@@ -17,7 +17,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Tickable
 
-class VatBlockEntity(block: VatBlock): SyncedBlockEntity(block), Tickable {
+class VatBlockEntity(block: VatBlock): SyncedBlockEntity<VatBlock>(block), Tickable {
 
     var lastRenderedFluid = 0f
     val inv = object : FullFixedItemInv(1) {

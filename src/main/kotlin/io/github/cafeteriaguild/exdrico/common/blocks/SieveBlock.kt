@@ -4,7 +4,6 @@ import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
 import io.github.cafeteriaguild.exdrico.common.items.ItemCompendium
 import io.github.cafeteriaguild.exdrico.common.items.MeshItem
 import io.github.cafeteriaguild.exdrico.common.meshes.MeshType
-import io.github.cafeteriaguild.exdrico.utils.SpriteColorCache
 import io.github.cafeteriaguild.exdrico.utils.VisibleBlockWithEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -59,9 +58,9 @@ class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(s
 
         (holdingItem as? BlockItem)?.let {
             val block = it.block
-            if (blockEntity.block == null && blockEntity.meshType != null) {
+            if (blockEntity.processingBlock == null && blockEntity.meshType != null) {
                 if(world is ServerWorld && SieveBlockEntity.getLoot(world, block, blockEntity.meshType ?: MeshType.EMPTY).isNotEmpty()) {
-                    blockEntity.block = block
+                    blockEntity.processingBlock = block
                     holdingStack.decrement(1)
                     blockEntity.markDirtyAndSync()
                 }
@@ -69,7 +68,7 @@ class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(s
             }
         }
 
-        if(holdingStack.isEmpty && player.isSneaking && blockEntity.block == null && blockEntity.meshType != null) {
+        if(holdingStack.isEmpty && player.isSneaking && blockEntity.processingBlock == null && blockEntity.meshType != null) {
             val meshType = blockEntity.meshType
             blockEntity.meshType = null
             blockEntity.markDirtyAndSyncRender()
@@ -79,12 +78,12 @@ class SieveBlock(baseBlock: Block, settings: Settings): VisibleBlockWithEntity(s
             return ActionResult.CONSUME
         }
 
-        if(blockEntity.block != null && blockEntity.meshType != null) {
+        if(blockEntity.processingBlock != null && blockEntity.meshType != null) {
             blockEntity.progress += 10
-            val block = blockEntity.block ?: Blocks.AIR
+            val block = blockEntity.processingBlock ?: Blocks.AIR
             if(blockEntity.progress >= 100) {
                 blockEntity.progress = 0
-                blockEntity.block = null
+                blockEntity.processingBlock = null
                 if(world is ServerWorld) {
                     val loot = SieveBlockEntity.getLoot(world, block, blockEntity.meshType ?: MeshType.EMPTY)
                     ItemScatterer.spawn(world, pos, loot)

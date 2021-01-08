@@ -1,10 +1,8 @@
 package io.github.cafeteriaguild.exdrico.client.render.block
 
 import com.mojang.datafixers.util.Pair
-import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
-import io.github.cafeteriaguild.exdrico.common.blocks.SieveBlock
-import io.github.cafeteriaguild.exdrico.common.meshes.MeshType
-import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
+import io.github.cafeteriaguild.exdrico.common.blockentities.InfestedLeavesBlockEntity
+import io.github.cafeteriaguild.exdrico.common.blocks.InfestedLeavesBlock
 import io.github.cafeteriaguild.exdrico.utils.emitFromVanilla
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
@@ -29,26 +27,25 @@ import java.util.function.Consumer
 import java.util.function.Function
 import java.util.function.Supplier
 
-class SieveModel: UnbakedModel, BakedModel, FabricBakedModel {
+class InfestedLeavesModel: UnbakedModel, BakedModel, FabricBakedModel {
 
-    private val spriteArray = arrayOfNulls<Sprite>(SieveBlock.sprites.size)
+    private val spriteArray = arrayOfNulls<Sprite>(InfestedLeavesBlock.sprites.size)
 
     private val modelIdentifierCollection = mutableListOf<Identifier>(
-        ModelIdentifier(ModIdentifier("sieve"), ""),
-        ModelIdentifier(ModIdentifier("sieve_mesh"), "inventory")
+        ModelIdentifier(Identifier("stone"), ""),
     )
-    private val modelArray = arrayOfNulls<BakedModel>(2)
+    private val modelArray = arrayOfNulls<BakedModel>(1)
 
     //Get baked model dependencies
     override fun getModelDependencies() = modelIdentifierCollection
-    override fun getTextureDependencies(unbakedModelGetter: Function<Identifier, UnbakedModel>?, unresolvedTextureReferences: MutableSet<Pair<String, String>>?) = SieveBlock.sprites
+    override fun getTextureDependencies(unbakedModelGetter: Function<Identifier, UnbakedModel>?, unresolvedTextureReferences: MutableSet<Pair<String, String>>?) = InfestedLeavesBlock.sprites
 
     //Get actual baked model
     override fun bake(loader: ModelLoader, textureGetter: Function<SpriteIdentifier, Sprite>, rotationContainer: ModelBakeSettings?, modelId: Identifier?): BakedModel {
         modelIdentifierCollection.forEachIndexed { idx, modelIdentifier ->
             modelArray[idx] = loader.getOrLoadModel(modelIdentifier).bake(loader, textureGetter, rotationContainer, modelId)
         }
-        SieveBlock.sprites.forEachIndexed { idx, spriteIdentifier ->
+        InfestedLeavesBlock.sprites.forEachIndexed { idx, spriteIdentifier ->
             spriteArray[idx] = textureGetter.apply(spriteIdentifier)
         }
         return this
@@ -72,18 +69,17 @@ class SieveModel: UnbakedModel, BakedModel, FabricBakedModel {
     override fun isVanillaAdapter() = false
 
     override fun emitBlockQuads(worldView: BlockRenderView, state: BlockState, pos: BlockPos, randSupplier: Supplier<Random>, context: RenderContext) {
-        val block = worldView.getBlockState(pos).block as? SieveBlock ?: return
-        val meshType = (worldView.getBlockEntity(pos) as? SieveBlockEntity)?.meshType
-        emitCommonQuads(context, block, randSupplier, meshType)
+        val entity = worldView.getBlockEntity(pos) as? InfestedLeavesBlockEntity ?: return
+        if(entity.isFinished) emitCommonQuads(context, entity.block, randSupplier)
     }
 
     override fun emitItemQuads(stack: ItemStack, randSupplier: Supplier<Random>, context: RenderContext) {
-        val block = (stack.item as? BlockItem)?.block as? SieveBlock ?: return
+        val block = (stack.item as? BlockItem)?.block as? InfestedLeavesBlock ?: return
         emitCommonQuads(context, block, randSupplier)
     }
 
     @Suppress("DEPRECATION")
-    private fun emitCommonQuads(context: RenderContext, block: SieveBlock, randSupplier: Supplier<Random>, meshType: MeshType? = null) {
+    private fun emitCommonQuads(context: RenderContext, block: InfestedLeavesBlock, randSupplier: Supplier<Random>) {
         context.pushTransform { quad ->
             quad.nominalFace(GeometryHelper.lightFace(quad))
             quad.spriteColor(0, -1, -1, -1, -1)
@@ -94,19 +90,6 @@ class SieveModel: UnbakedModel, BakedModel, FabricBakedModel {
         modelArray[0]?.emitFromVanilla(context, randSupplier) { true }
 
         context.popTransform()
-
-        meshType?.let {
-            context.pushTransform { quad ->
-                quad.nominalFace(GeometryHelper.lightFace(quad))
-                quad.spriteColor(0, -1, -1, -1, -1)
-                quad.spriteBake(0, it.sprite, MutableQuadView.BAKE_LOCK_UV)
-                true
-            }
-
-            modelArray[1]?.emitFromVanilla(context, randSupplier) { true }
-
-            context.popTransform()
-        }
     }
 
 
