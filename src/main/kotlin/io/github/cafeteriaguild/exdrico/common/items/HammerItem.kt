@@ -1,12 +1,15 @@
 package io.github.cafeteriaguild.exdrico.common.items
 
-import net.minecraft.block.BlockState
-import net.minecraft.item.ItemStack
-import net.minecraft.item.PickaxeItem
+import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
+import net.minecraft.block.Block
+import net.minecraft.block.Blocks
+import net.minecraft.item.MiningToolItem
 import net.minecraft.item.ToolMaterial
 
-class HammerItem(material: ToolMaterial, settings: Settings) : PickaxeItem(material, 2, 2f, settings) {
+class HammerItem(material: ToolMaterial, settings: Settings) : MiningToolItem(7f, -4.5f, material, EFFECTIVE_BLOCKS, settings) {
 
-    override fun getMiningSpeedMultiplier(stack: ItemStack?, state: BlockState?): Float = miningSpeed
+    companion object {
+        val EFFECTIVE_BLOCKS = setOf<Block>(Blocks.STONE, Blocks.GRAVEL, Blocks.SAND, BlockCompendium.DUST)
+    }
 
 }

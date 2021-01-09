@@ -23,12 +23,13 @@ class ExDrico: ModInitializer {
     companion object {
         const val MOD_ID = "exdrico"
         var CREATIVE_TAB: ItemGroup = FabricItemGroupBuilder.create(ModIdentifier("creative_tab")).icon { ItemStack(OAK_SIEVE) }.appendItems{ stacks ->
-            stacks.addAll(BlockCompendium.blocksStack)
+            stacks.addAll(ItemCompendium.itemsStack)
             MeshType.TYPES.forEach {
                 val stack = ItemStack(MESH)
                 stack.orCreateTag.putString("mesh", it.key.toString())
                 stacks.add(stack)
             }
+            stacks.addAll(BlockCompendium.blocksStack)
         }.build()
     }
 

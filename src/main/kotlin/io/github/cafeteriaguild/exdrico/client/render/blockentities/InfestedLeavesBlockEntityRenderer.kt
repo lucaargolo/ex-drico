@@ -1,53 +1,36 @@
 package io.github.cafeteriaguild.exdrico.client.render.blockentities
 
 import io.github.cafeteriaguild.exdrico.common.blockentities.InfestedLeavesBlockEntity
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
-import net.minecraft.client.texture.Sprite
-import net.minecraft.client.util.SpriteIdentifier
+import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.client.util.math.Vector3f
-import net.minecraft.screen.PlayerScreenHandler
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.Direction
+import net.minecraft.util.math.MathHelper
 import net.minecraft.util.registry.Registry
-import java.awt.Color
 
 class InfestedLeavesBlockEntityRenderer(dispatcher: BlockEntityRenderDispatcher): BlockEntityRenderer<InfestedLeavesBlockEntity>(dispatcher) {
 
     override fun render(entity: InfestedLeavesBlockEntity, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
+        if(entity.isFinished) return
 
         val leavesBlock = entity.block.parent
         val leavesBlockIdentifier = Registry.BLOCK.getId(leavesBlock)
 
-        val spriteIdentifier = SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Identifier(leavesBlockIdentifier.namespace, "block/"+leavesBlockIdentifier.path))
-        val sprite = spriteIdentifier.sprite
-        val color = Color.WHITE
+        val initialColor = MinecraftClient.getInstance().blockColors.getColor(leavesBlock.defaultState, dispatcher.world, entity.pos, 0)
 
-        matrices.push()
+        val p = (entity.progress/InfestedLeavesBlockEntity.TICKS_TO_COMPLETE).coerceAtMost(1f)
 
-        val bb = vertexConsumers.getBuffer(RenderLayer.getCutoutMipped())
-        val entry = matrices.peek()
+        val red = MathHelper.lerp(p, (initialColor shr 16 and 255).toFloat(), 255f)/255f
+        val green = MathHelper.lerp(p, (initialColor shr 8 and 255).toFloat(), 255f)/255f
+        val blue = MathHelper.lerp(p, (initialColor and 255).toFloat(), 255f)/255f
 
-        renderVertices(bb, entry, Direction.SOUTH.unitVector, color, overlay, light, sprite, 0f, 1f, 0f, 1f, 1f, 1f, 1f, 1f) //Direction.SOUTH
-        renderVertices(bb, entry, Direction.NORTH.unitVector, color, overlay, light, sprite, 0f, 1f, 1f, 0f, 0f, 0f, 0f, 0f) //Direction.NORTH
-        renderVertices(bb, entry, Direction.EAST.unitVector, color, overlay, light, sprite, 1f, 1f, 1f, 0f, 0f, 1f, 1f, 0f) //Direction.EAST
-        renderVertices(bb, entry, Direction.WEST.unitVector, color, overlay, light, sprite, 0f, 0f, 0f, 1f, 0f, 1f, 1f, 0f) //Direction.WEST
-        renderVertices(bb, entry, Direction.DOWN.unitVector, color, overlay, light, sprite, 0f, 1f, 0f, 0f, 0f, 0f, 1f, 1f) //Direction.DOWN
-        renderVertices(bb, entry, Direction.UP.unitVector, color, overlay, light, sprite, 0f, 1f, 1f, 1f, 1f, 1f, 0f, 0f) //Direction.UP
-
-        matrices.pop()
+        val leavesModel = MinecraftClient.getInstance().bakedModelManager.getModel(ModelIdentifier(leavesBlockIdentifier, "distance=1,persistent=false"))
+        MinecraftClient.getInstance().blockRenderManager.modelRenderer.render(matrices.peek(), vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), leavesBlock.defaultState, leavesModel, red, green, blue, light, overlay)
     }
 
-    private fun renderVertices(bb: VertexConsumer, entry: MatrixStack.Entry, normal: Vector3f, color: Color, overlay: Int, light: Int, sprite: Sprite, f: Float, g: Float, h: Float, i: Float, j: Float, k: Float, l: Float, m: Float) {
-        bb.vertex(entry.model, f, h, j).color(color.red/255f, color.green/255f, color.blue/255f, 1f).texture(sprite.maxU, sprite.minV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
-        bb.vertex(entry.model, g, h, k).color(color.red/255f, color.green/255f, color.blue/255f, 1f).texture(sprite.minU, sprite.minV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
-        bb.vertex(entry.model, g, i, l).color(color.red/255f, color.green/255f, color.blue/255f, 1f).texture(sprite.minU, sprite.maxV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
-        bb.vertex(entry.model, f, i, m).color(color.red/255f, color.green/255f, color.blue/255f, 1f).texture(sprite.maxU, sprite.maxV).overlay(overlay).light(light).normal(entry.normal, normal.x, normal.y, normal.z).next()
-    }
 
 
 }
