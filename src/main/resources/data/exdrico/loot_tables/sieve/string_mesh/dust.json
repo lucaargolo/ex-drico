@@ -13,10 +13,20 @@
               "conditions": [
                 {
                   "condition": "minecraft:random_chance",
-                  "chance": 0.03
+                  "chance": 0.2
                 }
               ],
-              "name": "minecraft:cocoa_beans"
+              "name": "minecraft:bone_meal"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.07
+                }
+              ],
+              "name": "minecraft:gunpowder"
             }
           ]
         }

@@ -1,0 +1,56 @@
+
+{
+  "type": "exdrico:sieve",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.2
+                }
+              ],
+              "name": "minecraft:dark_oak_sapling"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.2
+                }
+              ],
+              "name": "minecraft:apple"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.01
+                }
+              ],
+              "name": "minecraft:golden_apple"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.2
+                }
+              ],
+              "name": "exdrico:silkworm"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

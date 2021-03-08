@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "#M#",
+    "# #"
+  ],
+  "key": {
+    "M": {
+      "item": "exdrico:iron_mesh"
+    },
+    "#": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "exdrico:diamond_mesh",
+    "count": 1
+  }
+}

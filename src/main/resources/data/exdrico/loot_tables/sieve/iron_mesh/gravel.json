@@ -1,0 +1,56 @@
+
+{
+  "type": "exdrico:sieve",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.008
+                }
+              ],
+              "name": "minecraft:diamond"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.008
+                }
+              ],
+              "name": "minecraft:emerald"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.15
+                }
+              ],
+              "name": "exdrico:iron_ore_piece"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.075
+                }
+              ],
+              "name": "exdrico:gold_ore_piece"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

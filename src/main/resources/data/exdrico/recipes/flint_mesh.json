@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "#M#",
+    "# #"
+  ],
+  "key": {
+    "M": {
+      "item": "exdrico:string_mesh"
+    },
+    "#": {
+      "item": "minecraft:flint"
+    }
+  },
+  "result": {
+    "item": "exdrico:flint_mesh",
+    "count": 1
+  }
+}

@@ -1,0 +1,46 @@
+
+{
+  "type": "exdrico:sieve",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.7
+                }
+              ],
+              "name": "minecraft:wheat_seeds"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.35
+                }
+              ],
+              "name": "minecraft:melon_seeds"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.35
+                }
+              ],
+              "name": "minecraft:pumpkin_seeds"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
