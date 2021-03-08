@@ -1,6 +1,11 @@
 {
   "replace": false,
   "values": [
-    "exdrico:stone_hammer"
+    "exdrico:wooden_hammer",
+    "exdrico:stone_hammer",
+    "exdrico:iron_hammer",
+    "exdrico:gold_hammer",
+    "exdrico:diamond_hammer",
+    "exdrico:netherite_hammer"
   ]
 }

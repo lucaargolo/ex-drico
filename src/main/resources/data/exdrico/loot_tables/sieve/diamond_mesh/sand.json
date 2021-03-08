@@ -13,10 +13,20 @@
               "conditions": [
                 {
                   "condition": "minecraft:random_chance",
-                  "chance": 0.03
+                  "chance": 0.02
                 }
               ],
-              "name": "minecraft:cocoa_beans"
+              "name": "minecraft:prismarine_shard"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.5
+                }
+              ],
+              "name": "exdraco:iron_ore_piece"
             }
           ]
         }

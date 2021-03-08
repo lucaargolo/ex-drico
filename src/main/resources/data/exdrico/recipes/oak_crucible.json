@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "#_#",
+    "/ /"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:logs"
+    },
+    "_": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "exdrico:oak_crucible",
+    "count": 1
+  }
+}

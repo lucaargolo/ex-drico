@@ -1,6 +1,11 @@
 {
   "replace": false,
   "values": [
-    "exdrico:wooden_crook"
+    "exdrico:wooden_crook",
+    "exdrico:stone_crook",
+    "exdrico:iron_crook",
+    "exdrico:gold_crook",
+    "exdrico:diamond_crook",
+    "exdrico:netherite_crook"
   ]
 }

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "#M#",
+    "# #"
+  ],
+  "key": {
+    "M": {
+      "item": "exdrico:flint_mesh"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "exdrico:iron_mesh",
+    "count": 1
+  }
+}
