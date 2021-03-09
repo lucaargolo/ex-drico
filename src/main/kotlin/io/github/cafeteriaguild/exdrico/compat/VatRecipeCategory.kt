@@ -4,7 +4,10 @@ import alexiil.mc.lib.attributes.fluid.amount.FluidAmount
 import alexiil.mc.lib.attributes.fluid.volume.FluidKeys
 import alexiil.mc.lib.attributes.fluid.volume.FluidVolume
 import com.mojang.blaze3d.systems.RenderSystem
+import io.github.cafeteriaguild.exdrico.client.render.blockentities.VatBlockEntityRenderer
+import io.github.cafeteriaguild.exdrico.common.blockentities.VatBlockEntity
 import io.github.cafeteriaguild.exdrico.common.blocks.BlockCompendium
+import io.github.cafeteriaguild.exdrico.utils.RenderItemUtils
 import it.unimi.dsi.fastutil.ints.IntList
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
@@ -14,6 +17,7 @@ import me.shedaniel.rei.api.widgets.Widgets
 import me.shedaniel.rei.gui.widget.Widget
 import net.minecraft.block.Block
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher
 import net.minecraft.client.resource.language.I18n
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.BlockItem
@@ -88,9 +92,16 @@ class VatRecipeCategory: TransferRecipeCategory<VatRecipeDisplay> {
         necessaryFluid?.let {
             val vatOffset = if(hasBlockBellow) 5 else 9
 
-            widgets.add( Widgets.createDrawableWidget { _, _, _, _, _ ->
+            widgets.add( Widgets.createDrawableWidget { _, _, _, _, delta ->
                 RenderSystem.scalef(2f, 2f, 1f)
                 RenderSystem.translatef(0f, 0f, 400f)
+                RenderItemUtils.registerFabricBakedItemHook { _, _, matrixStack, vertexConsumerProvider, lightmap, overlay ->
+                    val dummyVat = VatBlockEntity(BlockCompendium.ACACIA_VAT)
+                    dummyVat.lastRenderedFluid = 1f
+                    dummyVat.fluidInv.getTank(0).set(necessaryFluid)
+                    val dummyRenderer = VatBlockEntityRenderer(BlockEntityRenderDispatcher.INSTANCE)
+                    dummyRenderer.render(dummyVat, delta, matrixStack, vertexConsumerProvider, lightmap, overlay)
+                }
                 MinecraftClient.getInstance().itemRenderer.renderInGui(ItemStack(BlockCompendium.ACACIA_VAT), bounds.x/2 + 5, bounds.y/2 + vatOffset)
                 RenderSystem.translatef(0f, 0f, -400f)
                 RenderSystem.scalef(0.5f, 0.5f, 1f)
@@ -123,9 +134,20 @@ class VatRecipeCategory: TransferRecipeCategory<VatRecipeDisplay> {
                             })
                         }
 
-                        widgets.add( Widgets.createDrawableWidget { _, _, _, _, _ ->
+                        val fluid = entries[0].fluid
+                        val amount = entries[0].amount
+                        val outputFluid = FluidKeys.get(fluid).withAmount(FluidAmount.BUCKET)
+
+                        widgets.add( Widgets.createDrawableWidget { _, _, _, _, delta ->
                             RenderSystem.scalef(2f, 2f, 1f)
                             RenderSystem.translatef(0f, 0f, 400f)
+                            RenderItemUtils.registerFabricBakedItemHook { _, _, matrixStack, vertexConsumerProvider, lightmap, overlay ->
+                                val dummyVat = VatBlockEntity(BlockCompendium.ACACIA_VAT)
+                                dummyVat.lastRenderedFluid = 1f
+                                dummyVat.fluidInv.getTank(0).set(outputFluid)
+                                val dummyRenderer = VatBlockEntityRenderer(BlockEntityRenderDispatcher.INSTANCE)
+                                dummyRenderer.render(dummyVat, delta, matrixStack, vertexConsumerProvider, lightmap, overlay)
+                            }
                             MinecraftClient.getInstance().itemRenderer.renderInGui(ItemStack(BlockCompendium.ACACIA_VAT), bounds.x/2 + 55, bounds.y/2 + 5)
                             RenderSystem.translatef(0f, 0f, -400f)
                             RenderSystem.scalef(0.5f, 0.5f, 1f)

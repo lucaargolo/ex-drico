@@ -1,6 +1,10 @@
 package io.github.cafeteriaguild.exdrico.client.render.blockentities
 
 import io.github.cafeteriaguild.exdrico.common.blockentities.SieveBlockEntity
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.color.block.BlockColorProvider
+import net.minecraft.client.color.block.BlockColors
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexConsumerProvider
@@ -28,7 +32,7 @@ class SieveBlockEntityRenderer(dispatcher: BlockEntityRenderDispatcher): BlockEn
         val blockIdentifier = Registry.BLOCK.getId(block)
         val spriteIdentifier = SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Identifier(blockIdentifier.namespace, "block/"+blockIdentifier.path))
         val sprite = spriteIdentifier.sprite
-        val color = Color.WHITE
+        val color = Color(MinecraftClient.getInstance().blockColors.getColor(block.defaultState, entity.world, entity.pos))
 
         matrices.push()
         matrices.translate(0.0, 0.75, 0.0)

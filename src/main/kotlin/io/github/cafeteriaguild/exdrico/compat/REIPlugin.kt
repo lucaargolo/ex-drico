@@ -52,13 +52,11 @@ object REIPlugin : REIPluginV0 {
         SievesTableCache.getCache().forEach { identifier ->
             val info = identifier.path.split("/")
             if(info.size == 3) {
-                val mesh = MeshType.TYPES[ModIdentifier(info[1])]
+                val mesh = MeshType.TYPES[ModIdentifier(info[1])] ?: MeshType.EMPTY
                 val block = Registry.BLOCK.get(Identifier(info[2]))
-                recipeHelper.registerDisplay(SieveLootDisplay(block, identifier))
+                recipeHelper.registerDisplay(SieveLootDisplay(block, mesh, identifier))
             }
         }
-        val wl: WeightedList<ItemStack> = WeightedList()
-        wl.add(ItemStack(Blocks.NETHERITE_BLOCK), 100)
     }
 
     override fun registerOthers(recipeHelper: RecipeHelper) {

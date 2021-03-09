@@ -6,7 +6,6 @@ import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.EntryStack
 import me.shedaniel.rei.api.widgets.Label
-import me.shedaniel.rei.api.widgets.Slot
 import me.shedaniel.rei.api.widgets.Widgets
 import me.shedaniel.rei.gui.widget.Widget
 import net.minecraft.client.MinecraftClient
@@ -27,9 +26,11 @@ class SieveLootCategory: LootCategory() {
         val widgets: MutableList<Widget> = mutableListOf()
         widgets.add(Widgets.createCategoryBase(bounds))
 
-        widgets.add( Widgets.createDrawableWidget { _, _, _, _, _ ->
+        widgets.add( Widgets.createDrawableWidget { _, _, _, _, delta ->
             RenderSystem.scalef(2f, 2f, 1f)
-            MinecraftClient.getInstance().itemRenderer.renderInGui(ItemStack(BlockCompendium.ACACIA_SIEVE), bounds.x/2 + 5, bounds.y/2 + 9)
+            val renderStack = ItemStack(BlockCompendium.ACACIA_SIEVE)
+            renderStack.orCreateTag.putString("mesh", (lootDisplay as? SieveLootDisplay)?.meshType?.identifier?.toString() ?: "")
+            MinecraftClient.getInstance().itemRenderer.renderInGui(renderStack, bounds.x/2 + 5, bounds.y/2 + 14)
             RenderSystem.scalef(0.5f, 0.5f, 1f)
         })
 
@@ -38,7 +39,9 @@ class SieveLootCategory: LootCategory() {
         return widgets
     }
 
-    override fun registerWidget(display: LootDisplay?, widgets: MutableList<Widget>?, bounds: Rectangle?) { }
+    override fun registerWidget(display: LootDisplay, widgets: MutableList<Widget>, bounds: Rectangle) {
+        widgets.add(Widgets.createSlot(Point(bounds.x+18, bounds.y + 9)).entry(display.inputStack))
+    }
 
     override fun getOutputsArea(root: Rectangle): Rectangle {
         return Rectangle(root.x + 46, root.y + 6, root.width - 17 - 36, root.height - 12)

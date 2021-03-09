@@ -79,7 +79,9 @@ class SieveModel: UnbakedModel, BakedModel, FabricBakedModel {
 
     override fun emitItemQuads(stack: ItemStack, randSupplier: Supplier<Random>, context: RenderContext) {
         val block = (stack.item as? BlockItem)?.block as? SieveBlock ?: return
-        emitCommonQuads(context, block, randSupplier)
+        val tag = stack.orCreateTag
+        val meshType = MeshType.TYPES[Identifier.tryParse(tag.getString("mesh"))]
+        emitCommonQuads(context, block, randSupplier, meshType)
     }
 
     @Suppress("DEPRECATION")
