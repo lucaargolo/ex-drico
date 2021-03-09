@@ -16,7 +16,7 @@
                   "chance": 0.8
                 }
               ],
-              "name": "minecraft:nether_quartz"
+              "name": "minecraft:quartz"
             },
             {
               "type": "minecraft:item",

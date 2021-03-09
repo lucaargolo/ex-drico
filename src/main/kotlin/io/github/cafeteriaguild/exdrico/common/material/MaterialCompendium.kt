@@ -13,9 +13,13 @@ object MaterialCompendium {
         return color
     }
 
-    val COPPER = register(ModIdentifier("copper"), 0xfa8d20)
-    val LEAD = register(ModIdentifier("lead"), 0x592099)
-    val GOLD = register(ModIdentifier("gold"), 0xffdd00)
+    val COPPER = register(ModIdentifier("copper"), 0xCA651F)
+    val TIN = register(ModIdentifier("tin"), 0xFFFFFF)
+    val IRON = register(ModIdentifier("iron"), 0xD5D5D5)
+    val GOLD = register(ModIdentifier("gold"), 0xE7EB56)
+    val LEAD = register(ModIdentifier("lead"), 0x705186)
+    val SILVER = register(ModIdentifier("silver"), 0xC5F5F0)
+    val NICKEL = register(ModIdentifier("nickel"), 0xCBBB6E)
 
     fun initMaterials() {
         materialMap.forEach { (identifier, color) ->

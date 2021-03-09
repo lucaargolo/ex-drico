@@ -1,8 +1,8 @@
 package io.github.cafeteriaguild.exdrico.common.meshes
 
 import io.github.cafeteriaguild.exdrico.client.network.ClientPacketCompendium
-import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.client.texture.Sprite
 import net.minecraft.client.util.SpriteIdentifier
 import net.minecraft.network.PacketByteBuf
@@ -34,13 +34,13 @@ data class MeshType(val texture: Identifier) {
         }
 
         fun syncTypes(playerEntity: ServerPlayerEntity) {
-            val packetData = PacketByteBuf(Unpooled.buffer())
+            val packetData = PacketByteBufs.create()
             packetData.writeInt(TYPES.size)
             TYPES.forEach { (identifier, meshType) ->
                 packetData.writeIdentifier(identifier)
                 meshType.writeToBuf(packetData)
             }
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(playerEntity, ClientPacketCompendium.SYNC_MESH_DATA_S2C, packetData)
+            ServerPlayNetworking.send(playerEntity, ClientPacketCompendium.SYNC_MESH_DATA_S2C, packetData)
         }
     }
 

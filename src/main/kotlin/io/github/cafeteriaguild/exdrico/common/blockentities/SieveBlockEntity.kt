@@ -40,7 +40,7 @@ class SieveBlockEntity(block: SieveBlock): SyncedBlockEntity<SieveBlock>(block) 
     }
 
     companion object {
-        private val SIEVE_LOOT_CONTEXT: LootContextType = LootContextType.Builder().build()
+        val SIEVE_LOOT_CONTEXT: LootContextType = LootContextType.Builder().build()
         init {
             AccessorLootContextTypes.getMap()[ModIdentifier("sieve")] = SIEVE_LOOT_CONTEXT
         }

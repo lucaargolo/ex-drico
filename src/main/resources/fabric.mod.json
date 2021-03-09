@@ -28,7 +28,7 @@
     "rei_plugins_v0": [
       {
         "adapter": "kotlin",
-        "value": "io.github.cafeteriaguild.exdrico.common.rei.REIPlugin"
+        "value": "io.github.cafeteriaguild.exdrico.compat.REIPlugin"
       }
     ]
   },

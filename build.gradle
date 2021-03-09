@@ -36,6 +36,10 @@ repositories {
         name = "Cotton MC"
         url = "http://server.bbkr.space:8081/artifactory/libs-release"
     }
+    maven {
+        name = "Curse Maven"
+        url = "https://www.cursemaven.com"
+    }
     mavenLocal()
 }
 
@@ -58,6 +62,7 @@ dependencies {
 
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
     modImplementation "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+    modImplementation "curse.maven:roughly-enough-resources-325625:${project.rer_version}"
     modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
 }
 

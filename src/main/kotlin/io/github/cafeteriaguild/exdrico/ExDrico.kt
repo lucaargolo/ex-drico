@@ -10,6 +10,7 @@ import io.github.cafeteriaguild.exdrico.common.meshes.MeshResource
 import io.github.cafeteriaguild.exdrico.common.meshes.MeshType
 import io.github.cafeteriaguild.exdrico.common.recipes.VatRecipe
 import io.github.cafeteriaguild.exdrico.utils.ModIdentifier
+import io.github.cafeteriaguild.exdrico.utils.SievesTableCache
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
@@ -38,6 +39,7 @@ class ExDrico: ModInitializer {
         BlockCompendium.initBlocks()
         ItemCompendium.initItems()
         FluidCompendium.initFluids()
+        SievesTableCache.initCache()
 
         Registry.register(Registry.RECIPE_TYPE, VatRecipe.ID, VatRecipe.TYPE)
         Registry.register(Registry.RECIPE_SERIALIZER, VatRecipe.ID, VatRecipe.SERIALIZER)

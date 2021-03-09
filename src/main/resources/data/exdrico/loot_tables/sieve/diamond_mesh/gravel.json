@@ -36,7 +36,7 @@
                   "chance": 0.25
                 }
               ],
-              "name": "exdrico:iron_ore_piece"
+              "name": "exdrico:iron_pieces"
             },
             {
               "type": "minecraft:item",
@@ -46,7 +46,7 @@
                   "chance": 0.15
                 }
               ],
-              "name": "exdrico:gold_ore_piece"
+              "name": "exdrico:gold_pieces"
             }
           ]
         }
